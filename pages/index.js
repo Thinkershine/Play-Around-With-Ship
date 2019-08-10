@@ -1,4 +1,5 @@
 import React, { useReducer, useEffect } from "react";
+import Tetris from "./tetris";
 
 const spaceshipReducer = (state, action) => {
   switch (action.type) {
@@ -184,6 +185,8 @@ const Index = () => {
           position: "absolute"
         }}
       />
+      <hr style={{ margin: 50 }} />
+      <Tetris />
     </div>
   );
 };
