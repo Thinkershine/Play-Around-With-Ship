@@ -1,16 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const isDev = false;
+const isPlaying = true;
+
 const blockTypes = {
   square: [["BLUE", "BLUE"], ["BLUE", "BLUE"]]
 };
 
+const emptyBoard = [
+  [["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"]],
+  [["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"]],
+  [["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"]],
+  [["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"]],
+  [["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"]]
+];
+
 const colouredBoard = [
-  [["GREEN"], ["r0c1"], ["r0c2"], ["BLUE"], ["BLUE"]],
+  [["GREEN"], ["EMPTY"], ["EMPTY"], ["BLUE"], ["BLUE"]],
   [["GREEN"], ["YELLOW"], ["YELLOW"], ["BLUE"], ["BLUE"]],
-  [["GREEN"], ["GREEN"], ["YELLOW"], ["YELLOW"], ["r2c4"]],
-  [["r3c0"], ["BLACK"], ["BLACK"], ["BLACK"], ["BLACK"]],
-  [["r4c0"], ["r4c1"], ["r4c2"], ["r4c3"], ["r4c4"]]
+  [["GREEN"], ["GREEN"], ["YELLOW"], ["YELLOW"], ["EMPTY"]],
+  [["EMPTY"], ["BLACK"], ["BLACK"], ["BLACK"], ["BLACK"]],
+  [["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"], ["EMPTY"]]
 ];
 
 const initialBoard = [
@@ -22,7 +32,24 @@ const initialBoard = [
 ];
 
 const Tetris = () => {
-  const [board, setBoardSize] = useState(isDev ? initialBoard : colouredBoard);
+  const initialBoard = isDev
+    ? initialBoard
+    : isPlaying
+    ? emptyBoard
+    : colouredBoard;
+
+  const [board, setBoard] = useState(initialBoard);
+  const [nextBlock, setNextBlock] = useState(blockTypes.square);
+  useEffect(() => {
+    let playTimer = setInterval(moveBlocks, 1000);
+    return () => {
+      clearInterval(playTimer);
+    };
+  });
+
+  const moveBlocks = () => {
+    console.log("BLOCKS MOVING");
+  };
 
   const drawBlock = color => {
     console.log("DRAW BLOCK COLOR", color[0]);
