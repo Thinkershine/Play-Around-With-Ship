@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 
+const isDev = false;
 const blockTypes = {
-  square: [["x", "x"], ["x", "x"]]
+  square: [["BLUE", "BLUE"], ["BLUE", "BLUE"]]
 };
 
 const colouredBoard = [
   [["GREEN"], ["r0c1"], ["r0c2"], ["BLUE"], ["BLUE"]],
-  [["r1c0"], ["BLACK"], ["r1c2"], ["BLUE"], ["BLUE"]],
-  [["r2c0"], ["r2c1"], ["YELLOW"], ["r2c3"], ["r2c4"]],
-  [["r3c0"], ["r3c1"], ["r3c2"], ["r3c3"], ["r3c4"]],
+  [["GREEN"], ["YELLOW"], ["YELLOW"], ["BLUE"], ["BLUE"]],
+  [["GREEN"], ["GREEN"], ["YELLOW"], ["YELLOW"], ["r2c4"]],
+  [["r3c0"], ["BLACK"], ["BLACK"], ["BLACK"], ["BLACK"]],
   [["r4c0"], ["r4c1"], ["r4c2"], ["r4c3"], ["r4c4"]]
 ];
 
 const initialBoard = [
-  [["GREEN"], ["r0c1"], ["r0c2"], ["r0c3"], ["r0c4"]],
+  [["r0c0"], ["r0c1"], ["r0c2"], ["r0c3"], ["r0c4"]],
   [["r1c0"], ["r1c1"], ["r1c2"], ["r1c3"], ["r1c4"]],
   [["r2c0"], ["r2c1"], ["r2c2"], ["r2c3"], ["r2c4"]],
   [["r3c0"], ["r3c1"], ["r3c2"], ["r3c3"], ["r3c4"]],
@@ -21,7 +22,7 @@ const initialBoard = [
 ];
 
 const Tetris = () => {
-  const [board, setBoardSize] = useState(initialBoard);
+  const [board, setBoardSize] = useState(isDev ? initialBoard : colouredBoard);
 
   const drawBlock = color => {
     console.log("DRAW BLOCK COLOR", color[0]);
@@ -50,7 +51,17 @@ const Tetris = () => {
     console.log("AFTER COLOURING", blockColor);
     return (
       <div className="block" style={blockColor}>
-        {color}
+        <p
+          style={{
+            color: "black",
+            height: 25,
+            width: 25,
+            margin: 0,
+            padding: 0
+          }}
+        >
+          {isDev ? color : ""}
+        </p>
       </div>
     );
   };
@@ -64,7 +75,6 @@ const Tetris = () => {
       height: 20,
       margin: 5,
       color: "black",
-      backgroundColor: "red",
       zIndex: 100,
       overflow: "hidden"
     };
@@ -75,7 +85,6 @@ const Tetris = () => {
       marginLeft: 5,
       marginRight: 5,
       color: "black",
-      backgroundColor: "yellow",
       zIndex: 100,
       float: "left"
     };
@@ -87,7 +96,6 @@ const Tetris = () => {
         columns.push(
           <div className="col" style={colStyle}>
             {drawBlock(board[i][j])}
-            {board[i][j]}
             {console.log(board[i][j])}
           </div>
         );
@@ -112,8 +120,8 @@ const Tetris = () => {
           left: 10,
           top: 20,
           width: 200,
-          height: 100,
-          backgroundColor: "purple"
+          height: 200,
+          backgroundColor: "rgba(150, 150, 255, 0.2)"
         }}
       >
         {drawBoard()}
