@@ -1,63 +1,62 @@
-import React, { Component } from "react";
+import React, { useReducer, useEffect } from "react";
 
-class Index extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      backgroundCanvas: this.refs.canvas,
-      handleKeyPress: this.handleKeyPress.bind(this),
-      spaceshipStyle: {
-        width: 10,
-        height: 20,
-        left: 100,
-        right: 100,
-        top: 50,
-        backgroundColor: "purple",
-        position: "relative"
-      }
-    };
+const spaceshipReducer = (state, action) => {
+  switch (action.type) {
+    case "MOVE_LEFT":
+      return { ...state, leftPosition: action.payload.leftPosition };
+    case "MOVE_UP":
+      return { ...state, topPosition: action.payload.topPosition };
+    case "MOVE_RIGHT":
+      return { ...state, leftPosition: action.payload.leftPosition };
+    case "MOVE_DOWN":
+      return { ...state, topPosition: action.payload.topPosition };
+    default:
+      return new Error();
   }
+};
 
-  componentDidMount() {
-    this.setState({ backgroundCanvas: this.refs.canvas }, () =>
-      this.setState({ context: this.state.backgroundCanvas.getContext("2d") })
-    );
+const Index = () => {
+  const spaceshipConfig = { speed: 10 };
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  });
 
-    document.addEventListener("keydown", this.handleKeyPress);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyPress);
-  }
-
-  handleKeyPress = event => {
-    console.log("EVENT", event.keyCode);
-    const spaceship = document.getElementById("spaceship");
-    if (event.keyCode === 200) {
-      console.log("UP");
-    }
+  const handleKeyPress = event => {
     switch (event.keyCode) {
       case 37:
-        console.log("LEFT");
-        // spaceship.getBoundingClientRect().left += 10;
-        console.log(spaceship.offsetLeft);
-        // spaceship.style.left = spaceship.style.left + 5 + "px";
-        spaceship.style.left -= 1 + "px";
-        console.log("SPACESHIP", spaceship.style.left);
+        dispatchSpaceship({
+          type: "MOVE_LEFT",
+          payload: {
+            leftPosition: spaceshipPosition.leftPosition - spaceshipConfig.speed
+          }
+        });
         break;
       case 38:
-        console.log("UP");
-        spaceship.style.top = spaceship.style.top + 5 + "px";
+        dispatchSpaceship({
+          type: "MOVE_UP",
+          payload: {
+            topPosition: spaceshipPosition.topPosition - spaceshipConfig.speed
+          }
+        });
 
         break;
       case 39:
-        console.log("RIGHT");
-        spaceship.style.top = spaceship.style.right + 5 + "px";
+        dispatchSpaceship({
+          type: "MOVE_RIGHT",
+          payload: {
+            leftPosition: spaceshipPosition.leftPosition + spaceshipConfig.speed
+          }
+        });
 
         break;
       case 40:
-        console.log("DOWN");
-        spaceship.style.top = spaceship.style.botton + 5 + "px";
+        dispatchSpaceship({
+          type: "MOVE_DOWN",
+          payload: {
+            topPosition: spaceshipPosition.topPosition + spaceshipConfig.speed
+          }
+        });
 
         break;
       default:
@@ -66,22 +65,39 @@ class Index extends Component {
     }
   };
 
-  render() {
-    return (
-      <div>
-        <h1>Here it goes</h1>
-        {console.log("SPACESHPIT STYLE", this.state.spaceshipStyle)}
-        <div id="spaceship" style={this.state.spaceshpiStyle} />
-        <canvas
-          ref="canvas"
-          width={450}
-          height={450}
-          id="UniverseBackground"
-          onKeyDown={() => this.state.handleKeyPress()}
-        />
-      </div>
-    );
-  }
-}
+  const spaceshipStyle = {
+    width: 10,
+    height: 20,
+    left: 100,
+    right: 100,
+    top: 50,
+    backgroundColor: "purple",
+    position: "relative"
+  };
+
+  const [spaceshipPosition, dispatchSpaceship] = useReducer(spaceshipReducer, {
+    leftPosition: 10,
+    topPosition: 100
+  });
+
+  return (
+    <div>
+      <h1>Here it goes</h1>
+      {console.log("SPACESHPIT STYLE", spaceshipPosition)}
+      <div id="spaceship" style={spaceshipStyle} />
+      <div
+        id="spaceship2"
+        style={{
+          width: 20,
+          height: 20,
+          backgroundColor: "red",
+          left: spaceshipPosition.leftPosition,
+          top: spaceshipPosition.topPosition,
+          position: "absolute"
+        }}
+      />
+    </div>
+  );
+};
 
 export default Index;
