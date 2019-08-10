@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
-const isDev = false;
-const isPlaying = true;
+const isDev = true;
+const isPlaying = false;
 
 const blockTypes = {
   square: [["BLUE", "BLUE"], ["BLUE", "BLUE"]]
@@ -31,14 +31,16 @@ const initialBoard = [
   [["r4c0"], ["r4c1"], ["r4c2"], ["r4c3"], ["r4c4"]]
 ];
 
+const boardReducer = (state, action) => {};
+
 const Tetris = () => {
-  const initialBoard = isDev
+  const startingBoard = isDev
     ? initialBoard
     : isPlaying
     ? emptyBoard
     : colouredBoard;
 
-  const [board, setBoard] = useState(initialBoard);
+  const [board, dispatchBoard] = useReducer(boardReducer, startingBoard);
   const [nextBlock, setNextBlock] = useState(blockTypes.square);
   useEffect(() => {
     let playTimer = setInterval(moveBlocks, 1000);
