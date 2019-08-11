@@ -44,15 +44,15 @@ const Index = () => {
     direction: "none"
   });
 
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyPress);
-    return () => document.removeEventListener("keydown", handleKeyPress);
-  });
+  // useEffect(() => {
+  //   document.addEventListener("keydown", handleKeyPress);
+  //   return () => document.removeEventListener("keydown", handleKeyPress);
+  // });
 
-  useEffect(() => {
-    const flyShipTimer = setInterval(flyShip, 25);
-    return () => clearInterval(flyShipTimer);
-  });
+  // useEffect(() => {
+  //   const flyShipTimer = setInterval(flyShip, 25);
+  //   return () => clearInterval(flyShipTimer);
+  // });
 
   const flyShip = () => {
     console.log("FLY Direction: ", spaceshipPosition.direction);
