@@ -9,6 +9,30 @@ const blockTypes = {
     { color: "BLUE", row: 0, col: 1 },
     { color: "BLUE", row: 1, col: 0 },
     { color: "BLUE", row: 1, col: 1 }
+  ],
+  line: [
+    { color: "BLACK", row: 0, col: 0 },
+    { color: "BLACK", row: 1, col: 0 },
+    { color: "BLACK", row: 2, col: 0 },
+    { color: "BLACK", row: 3, col: 0 }
+  ],
+  lBlock: [
+    { color: "RED", row: 0, col: 0 },
+    { color: "RED", row: 1, col: 0 },
+    { color: "RED", row: 2, col: 0 },
+    { color: "RED", row: 2, col: 1 }
+  ],
+  zBlock: [
+    { color: "YELLOW", row: 0, col: 0 },
+    { color: "YELLOW", row: 0, col: 1 },
+    { color: "YELLOW", row: 1, col: 1 },
+    { color: "YELLOW", row: 1, col: 2 }
+  ],
+  pBlock: [
+    { color: "BLUE", row: 0, col: 0 },
+    { color: "BLUE", row: 1, col: -1 },
+    { color: "BLUE", row: 1, col: 0 },
+    { color: "BLUE", row: 1, col: 1 }
   ]
 };
 
@@ -123,7 +147,7 @@ const Tetris = () => {
     : colouredBoard;
   const [drawnBoard, setDrawnBoard] = useState([]);
   const [board, dispatchBoard] = useReducer(boardReducer, initialBoard); // change to programmatic board
-  const [nextBlock, setNextBlock] = useState(blockTypes.square);
+  const [nextBlock, setNextBlock] = useState(blockTypes.pBlock);
   useEffect(() => {
     let playTimer = setInterval(moveBlocks, 5000);
     return () => {
