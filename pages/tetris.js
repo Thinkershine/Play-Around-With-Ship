@@ -5,10 +5,10 @@ const isPlaying = false;
 
 const blockTypes = {
   square: [
-    { color: "BLUE" },
-    { color: "BLUE" },
-    { color: "BLUE" },
-    { color: "BLUE" }
+    { color: "BLUE", row: 0, col: 0 },
+    { color: "BLUE", row: 0, col: 1 },
+    { color: "BLUE", row: 1, col: 0 },
+    { color: "BLUE", row: 1, col: 1 }
   ]
 };
 
@@ -72,25 +72,46 @@ const initialBoard = [
   ]
 ];
 
-const boardReducer = (state, action) => {
-  console.log("STATE AT REDUCER", state[0][2]);
+const boardReducer = (board, action) => {
+  console.log("STATE AT REDUCER", board[0][2]);
   console.log("PAYLOAD TO SET", action.payload.currentBlock[0].color);
 
-  console.log("STATE", state);
+  console.log("STATE", board);
   //   let newBoard = state.map(block => block);
   //   newBoard[0][2] = action.payload.currentBlock[0][0];
   //   console.log("NEW BOARD", newBoard);
   //   (state[0][2] = action.payload.currentBlock[0][0]);
+
   switch (action.type) {
     case "NEW_BLOCK":
-      state[0][2] = {
-        color: action.payload.currentBlock[0].color,
-        index: state[0][2].index
-      };
+      const currentBlock = action.payload.currentBlock;
+      const initialRow = 0;
+      const initialCol = 2;
+      let row = initialRow;
+      let col = initialCol;
+
+      for (let i = 0; i < currentBlock.length; i += 1) {
+        if (i === 0) {
+          board[row][col] = {
+            color: currentBlock[0].color,
+            index: board[row][col].index
+          };
+
+          // update block
+        } else {
+          row = initialRow + currentBlock[i].row;
+          col = initialCol + currentBlock[i].col;
+          console.log("BLOCK ROW ", row, "BLOCK COL ", col);
+          board[row][col] = {
+            color: currentBlock[i].color,
+            index: board[row][col].index
+          };
+        }
+      }
       //   console.log("SPREADED STATE ", ...state);
-      return state;
+      return board;
     default:
-      return state;
+      return board;
   }
 };
 
@@ -104,7 +125,7 @@ const Tetris = () => {
   const [board, dispatchBoard] = useReducer(boardReducer, initialBoard); // change to programmatic board
   const [nextBlock, setNextBlock] = useState(blockTypes.square);
   useEffect(() => {
-    let playTimer = setInterval(moveBlocks, 2000);
+    let playTimer = setInterval(moveBlocks, 5000);
     return () => {
       clearInterval(playTimer);
     };
@@ -120,7 +141,7 @@ const Tetris = () => {
   };
 
   const drawBlock = block => {
-    console.log("DRAW BLOCK COLOR", block.color);
+    // console.log("DRAW BLOCK COLOR", block.color);
     let blockColor = { backgroundColor: "red" };
     switch (block.color) {
       case "GREEN":
@@ -143,7 +164,7 @@ const Tetris = () => {
         break;
     }
 
-    console.log("AFTER COLOURING", blockColor);
+    // console.log("AFTER COLOURING", blockColor);
     return (
       <div key={block.index} className="block" style={blockColor}>
         <p
@@ -190,24 +211,19 @@ const Tetris = () => {
   };
 
   const drawBoard = () => {
-    console.log("DRAWING BOARD");
     const redrawnBoard = [];
 
-    console.log("UHG", board.length);
     for (let i = 0; i < board.length; i += 1) {
       let columns = [];
 
       for (let j = 0; j < board[i].length; j += 1) {
-        console.log("DRAWING COLUMN ", j, "INSIDE ROW ", i);
+        console.log("DRAW COL ", j, " ROW ", i);
         columns.push(
           <div key={"col" + j} className="col" style={boardStyles.colStyle}>
             {drawBlock(board[i][j])}
             {console.log("BOARD PIECE", board[i][j])}
           </div>
         );
-      }
-      {
-        console.log("DRAWING ROW", i);
       }
       redrawnBoard.push(
         <div key={"row" + i} className="row" style={boardStyles.rowStyle}>
