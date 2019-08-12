@@ -102,25 +102,28 @@ const boardReducer = (state, action) => {
       const initialCol = 2;
       let row = initialRow;
       let col = initialCol;
+      let currentBlockSize = currentBlock.length;
+      let firstBlockPiece = 0;
+      let gameBoard = state.gameBoard;
 
       // Update GameBoard
-      for (let i = 0; i < currentBlock.length; i += 1) {
-        if (i === 0) {
-          state.gameBoard[row][col] = {
+      for (let blockPiece = 0; blockPiece < currentBlockSize; blockPiece += 1) {
+        if (blockPiece === firstBlockPiece) {
+          gameBoard[row][col] = {
             color: currentBlock[0].color,
-            index: state.gameBoard[row][col].index
+            index: gameBoard[row][col].index
           };
         } else {
-          row = initialRow + currentBlock[i].row;
-          col = initialCol + currentBlock[i].col;
-          state.gameBoard[row][col] = {
-            color: currentBlock[i].color,
-            index: state.gameBoard[row][col].index
+          row = initialRow + currentBlock[blockPiece].row;
+          col = initialCol + currentBlock[blockPiece].col;
+          gameBoard[row][col] = {
+            color: currentBlock[blockPiece].color,
+            index: gameBoard[row][col].index
           };
         }
 
         // Update CurrentBlock
-        state.currentBlock[i] = {
+        currentBlock[blockPiece] = {
           color: currentBlock[0].color,
           row: row,
           col: col
@@ -128,7 +131,7 @@ const boardReducer = (state, action) => {
 
         console.log("BLOCK ROW ", row, "BLOCK COL ", col);
       }
-      return { ...state, currentBlock: state.currentBlock };
+      return { ...state, currentBlock: currentBlock };
     case "MOVE_BLOCKS":
       const firstRow = 0;
       const lastRow = state.gameBoard.length;
