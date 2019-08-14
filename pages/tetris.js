@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from "react";
 
 const isDev = false;
 const isPlaying = false;
-const blocksFallingSpeed = 4000;
+const blocksFallingSpeed = 1000;
 
 const blockTypes = {
   square: [
@@ -95,7 +95,7 @@ const boardReducer = (state, action) => {
   switch (action.type) {
     case "NEW_BLOCK":
       console.log("CURRENT BLOCK", action.payload.currentBlock);
-      const currentBlock = action.payload.currentBlock;
+      let currentBlock = action.payload.currentBlock;
       state.currentBlock = currentBlock;
 
       const initialRow = 0;
@@ -158,23 +158,36 @@ const boardReducer = (state, action) => {
 
       return state;
     case "MOVE_BLOCK_DOWN":
-      // Update GameBoard
+      gameBoard = state.gameBoard;
+      currentBlock = state.currentBlock;
+
+      // #1 Check if block can move
+      let canMove = checkIfBlockCanMove(gameBoard, currentBlock, "DOWN");
+      console.log("BLOCK ", canMove ? "CAN MOVE" : "CAN'T MOVE", "DOWN");
+
+      // if can't move ??
+
+      // if hit -> Game Over ?
+
+      console.log("CURRENT BLOCK AT MOVE DOWN", state.currentBlock);
+
       // Update CurrentBlock
+      // later updated BLock??
+
+      let updatedBlock = state.currentBlock;
       //// Check for Collisions
       ////// Check for Left & Right Collision
       ////// Check for Last Row
-      console.log("CURRENT BLOCK AT MOVE DOWN", state.currentBlock);
 
-      const updatedBlock = state.currentBlock;
       for (let i = 0; i < updatedBlock.length; i += 1) {
-        if (updatedBlock[i].row !== state.gameBoard.length) {
+        if (updatedBlock[i].row !== gameBoard.length) {
           // Check if Block Under is Empty
-          if (state.gameBoard[i + 1][updatedBlock[i].col].color === "EMPTY") {
+          if (gameBoard[i + 1][updatedBlock[i].col].color === "EMPTY") {
             updatedBlock[i].row += 1;
           } else {
             console.log(
               "BLOCK UNDER IS TAKEN",
-              state.gameBoard[i + 1][updatedBlock[i].col]
+              gameBoard[i + 1][updatedBlock[i].col]
             );
           }
         } else {
@@ -182,7 +195,7 @@ const boardReducer = (state, action) => {
             "BLOCK HITTED BOTTOM",
             updatedBlock[i].row,
             "BOARD BOTTOM ROW",
-            state.gameBoard.length
+            gameBoard.length
           );
         }
 
@@ -191,18 +204,24 @@ const boardReducer = (state, action) => {
           let updatedBlockRow = updatedBlock[i].row;
           let updatedBlockCol = updatedBlock[i].col;
 
-          state.gameBoard[updatedBlockRow][updatedBlockCol] = {
+          gameBoard[updatedBlockRow][updatedBlockCol] = {
             color: updatedBlock[i].color,
-            index: state.gameBoard[updatedBlockRow][updatedBlockCol].index
+            index: gameBoard[updatedBlockRow][updatedBlockCol].index
           };
 
+          // Update GameBoard
           // clear old blocks
+          gameBoard = cleanBoard(gameBoard, updatedBlock);
+
           if (i !== 0) {
-            state.gameBoard[updatedBlockRow - 1][updatedBlockCol] = {
+            gameBoard[updatedBlockRow - 1][updatedBlockCol] = {
               color: "EMPTY",
-              index: state.gameBoard[updatedBlockRow][updatedBlockCol].index
+              index: gameBoard[updatedBlockRow][updatedBlockCol].index
             };
           }
+
+          // color board with new updatedBlock
+          gameBoard = updateBoard(gameBoard, updatedBlock);
         }
       }
       console.log("UPDATED CURRENT BLOCK ", updatedBlock);
@@ -210,6 +229,82 @@ const boardReducer = (state, action) => {
     default:
       return state;
   }
+};
+
+const checkIfBlockCanMove = (board, block, direction) => {
+  console.log("CHECK IF BLOCK CAN MOVE DIRECTION : ", direction);
+  let canMove = false;
+  let blockSize = block.length;
+
+  switch (direction) {
+    case "DOWN":
+      let lastRow = board.length;
+
+      console.log("BLOCK SIZE", blockSize);
+      for (let blockPiece = 0; blockPiece < blockSize; blockPiece += 1) {
+        let boardBelowIsOkToMove = checkBoardBelow(board, block[blockPiece]);
+        if (boardBelowIsOkToMove) {
+          if (boardBelowIsOkToMove) {
+            let boardBelowColor =
+              board[blockPiece.row + 1][blockPiece.col].color;
+            if (boardBelowColor === blockPiece.color) {
+              for (let i = 0; i < blockSize; i += 1) {
+                if (
+                  blockPiece.row ===
+                    board[blockPiece.row + 1][blockPiece.col].row &&
+                  blockPiece.col ===
+                    board[blockPiece.row + 1][blockPiece.col].col
+                ) {
+                  // check if below isn't part of this block...
+                  console.log("IT'S THE SAME BLOCK!");
+                  // get board specific x & y and block x & y
+                  // are they equal?
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return canMove;
+    default:
+      console.log("WRONG DATA @ checkIfBlockCanMove");
+      return new Error();
+  }
+};
+
+const checkBoardBelow = (board, blockPiece) => {
+  console.log("BLOCK PIECE AT cHECK BELOW ", blockPiece);
+  let lastRow = board.length;
+  let nextRow = blockPiece.row + 1;
+
+  if (nextRow >= lastRow) {
+    console.log(
+      "LAST ROW - CAN'T MOVE",
+      blockPiece.row + " : " + blockPiece.col
+    );
+    return false;
+  } else {
+    let nextRowColor = board[blockPiece.row + 1][blockPiece.col].color;
+    if (nextRowColor !== "EMPTY") {
+      console.log(
+        "NOT EMPTY CAN'T MOVE",
+        blockPiece.row + " : " + blockPiece.col
+      );
+      return false;
+    }
+    return true;
+  }
+};
+
+const cleanBoard = (board, block) => {
+  //   console.log("CLEAN BOARD");
+  return board;
+};
+
+const updateBoard = (board, block) => {
+  //   console.log("UPDATE BOARD");
+  return board;
 };
 
 const Tetris = () => {
