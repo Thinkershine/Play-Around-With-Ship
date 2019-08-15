@@ -186,7 +186,7 @@ const Index = () => {
         }}
       />
       <hr style={{ margin: 50 }} />
-      <Tetris />
+      {/* <Tetris /> */}
     </div>
   );
 };
