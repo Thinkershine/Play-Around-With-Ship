@@ -21,6 +21,7 @@ const playerReducer = (state, action) => {
 
 const TetrisAnother = () => {
   const board = useRef(null);
+  const [canvas, setCanvas] = useState();
   const [drawingBoardContext, setDrawingBoardContext] = useState();
 
   const matrix = [[0, 0, 0], [1, 1, 1], [0, 1, 0]];
@@ -38,10 +39,9 @@ const TetrisAnother = () => {
   useEffect(() => {
     const canvas = board.current;
     const context = canvas.getContext("2d");
-    context.scale(2, 2);
-    context.fillStyle = "#000";
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    setCanvas(canvas);
 
+    context.scale(2, 2);
     setDrawingBoardContext(context);
   }, []);
 
@@ -51,6 +51,8 @@ const TetrisAnother = () => {
   });
 
   const draw = () => {
+    drawingBoardContext.fillStyle = "#000";
+    drawingBoardContext.fillRect(0, 0, canvas.width, canvas.height);
     drawMatrix(matrix, player.pos);
   };
 
