@@ -14,6 +14,9 @@ const playerReducer = (state, action) => {
     case "DROP":
       console.log("DROP");
       return;
+    case "GRAVITY":
+      console.log("GRAVITY");
+      return { ...state, pos: { x: state.pos.x, y: state.pos.y + 1 } };
     default:
       return new Error();
   }
@@ -41,13 +44,17 @@ const TetrisAnother = () => {
     const context = canvas.getContext("2d");
     setCanvas(canvas);
 
-    context.scale(2, 2);
+    context.scale(20, 20);
     setDrawingBoardContext(context);
   }, []);
 
   useEffect(() => {
     let update = setInterval(draw, 1000);
-    return () => clearInterval(update);
+    let gravity = setInterval(drop, 1000);
+    return () => {
+      clearInterval(gravity);
+      clearInterval(update);
+    };
   });
 
   const draw = () => {
@@ -56,11 +63,15 @@ const TetrisAnother = () => {
     drawMatrix(matrix, player.pos);
   };
 
+  const drop = () => {
+    dispatchPlayer({
+      type: "GRAVITY"
+    });
+  };
+
   const drawMatrix = (matrix, offset) => {
-    console.log("DRAW MATRIX", matrix, "OFFSET", offset);
     matrix.forEach((row, y) => {
       row.forEach((value, x) => {
-        console.log("X + OFFSETX", x + offset.x);
         if (value !== 0) {
           drawingBoardContext.fillStyle = "red";
           drawingBoardContext.fillRect(x + offset.x, y + offset.y, 1, 1);
