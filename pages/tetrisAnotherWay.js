@@ -24,6 +24,7 @@ const playerReducer = (state, action) => {
 
 const TetrisAnother = () => {
   const board = useRef(null);
+  const [arena, setArena] = useState();
   const [canvas, setCanvas] = useState();
   const [drawingBoardContext, setDrawingBoardContext] = useState();
 
@@ -46,6 +47,8 @@ const TetrisAnother = () => {
 
     context.scale(20, 20);
     setDrawingBoardContext(context);
+
+    setArena(createMatrix(10, 18));
   }, []);
 
   useEffect(() => {
@@ -56,6 +59,23 @@ const TetrisAnother = () => {
       clearInterval(update);
     };
   });
+
+  const collide = (arena, player) => {
+    // Iterate over player
+    const [m, o] = [player.matrix, player.pos];
+    for (let y = 0; y < m.length; ++y) {
+      for (let x = 0; x < m[y].length; ++x) {
+        if (
+          m[y][x] !== 0 &&
+          (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0
+        ) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  };
 
   const draw = () => {
     drawingBoardContext.fillStyle = "#000";
@@ -78,6 +98,26 @@ const TetrisAnother = () => {
         }
       });
     });
+  };
+
+  const createMatrix = (width, height) => {
+    const matrix = [];
+    while (height !== 0) {
+      matrix.push(new Array(width).fill(0));
+      height -= 1;
+    }
+    return matrix;
+  };
+
+  const merge = (arena, player) => {
+    player.matrix.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value !== 0) {
+          arena[y + player.pos.y][x + player.pos.x] = value;
+        }
+      });
+    });
+    setArena(arena);
   };
 
   const handleKeyPress = event => {
@@ -108,10 +148,25 @@ const TetrisAnother = () => {
 
         break;
       case 40:
-        dispatchPlayer({
-          type: "DROP"
-        });
+        let bottomCollided = collide(arena, player);
+        if (bottomCollided) console.log("BOTTOM COLLIDED");
+        // if collided
+        // move back player
+        if (bottomCollided) {
+          merge(arena, player);
+        }
+        // merge arena and player
+        // playerBack to TOP -> RENDER NEW PIECE!
+        if (!bottomCollided) {
+          dispatchPlayer({
+            type: "DROP"
+          });
+        }
 
+        break;
+      case 68:
+        console.log("DRAW ARENA");
+        console.table(arena);
         break;
       default:
         console.log("Other Key", event.key, "Key Code", event.keyCode);
