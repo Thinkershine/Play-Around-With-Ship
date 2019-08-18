@@ -12,8 +12,8 @@ const playerReducer = (state, action) => {
       console.log("ROTATE");
       return;
     case "DROP":
-      console.log("DROP");
-      return;
+      console.log("DROP : STAT POS", state.pos);
+      return { ...state, pos: { x: state.pos.x, y: state.pos.y + 1 } };
     case "GRAVITY":
       console.log("GRAVITY");
       return { ...state, pos: { x: state.pos.x, y: state.pos.y + 1 } };
@@ -109,10 +109,7 @@ const TetrisAnother = () => {
         break;
       case 40:
         dispatchPlayer({
-          type: "DROP",
-          payload: {
-            direction: "DROP"
-          }
+          type: "DROP"
         });
 
         break;
