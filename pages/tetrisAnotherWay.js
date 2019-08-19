@@ -1,22 +1,104 @@
 import React, { useState, useReducer, useRef, useEffect } from "react";
 
-const playerReducer = (state, action) => {
+function createArena(width, height) {
+  const matrix = [];
+  while (height !== 0) {
+    matrix.push(new Array(width).fill(0));
+    height -= 1;
+  }
+  return matrix;
+}
+
+const collide = (arena, player) => {
+  console.log("ARena @ Collide", arena);
+  console.log("PLayer @ Collide", player);
+  // Iterate over player
+  const [m, position] = [player.matrix, player.pos];
+  for (let y = 0; y < m.length; y += 1) {
+    for (let x = 0; x < m[y].length; x += 1) {
+      if (
+        m[y][x] !== 0 &&
+        (arena[y + position.y] && arena[y + position.y][x + position.x]) !== 0
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
+function merge(arena, player) {
+  console.log("ARENA @ MERGE ", arena);
+  console.log("PLAYER @ MERGE ", player);
+  player.matrix.forEach((row, y) => {
+    row.forEach((value, x) => {
+      if (value !== 0) {
+        console.log("PLAYER POS Y ", player.pos.y + " Y: ", y);
+        console.log("PLAYER POS X ", player.pos.x + " X: ", x);
+        console.log("ARENA @ : ", arena[player.pos.y][player.pos.x]);
+        arena[player.pos.y][player.pos.x] = value;
+      }
+    });
+  });
+  return arena;
+}
+
+const gameReducer = (state, action) => {
+  const player = state.player;
+  const arena = state.arena;
+
   switch (action.type) {
     case "MOVE_LEFT":
-      console.log("MOVE LEFT : STAT POS", state.pos);
-      return { ...state, pos: { x: action.payload.x, y: state.pos.y } };
+      console.log("MOVE LEFT : STAT POS", player.pos);
+      return {
+        ...state,
+        player: {
+          pos: { x: action.payload.x, y: player.pos.y },
+          matrix: player.matrix
+        }
+      };
     case "MOVE_RIGHT":
-      console.log("MOVE RIGHT : STAT POS", state.pos);
-      return { ...state, pos: { x: action.payload.x, y: state.pos.y } };
+      console.log("MOVE RIGHT : STAT POS", player.pos);
+      return {
+        ...state,
+        player: {
+          pos: { x: action.payload.x, y: player.pos.y },
+          matrix: player.matrix
+        }
+      };
     case "ROTATE":
       console.log("ROTATE");
       return;
     case "DROP":
-      console.log("DROP : STAT POS", state.pos);
-      return { ...state, pos: { x: state.pos.x, y: state.pos.y + 1 } };
+      console.log("DROP : STAT POS", player.pos);
+      return {
+        ...state,
+        player: { pos: { x: player.pos.x, y: player.pos.y + 1 } },
+        matrix: player.matrix
+      };
     case "GRAVITY":
       console.log("GRAVITY");
-      return { ...state, pos: { x: state.pos.x, y: state.pos.y + 1 } };
+      console.log("PLAYER POS", player.pos);
+      let bottomCollided = collide(arena, player);
+      if (bottomCollided) {
+        let newArena = merge(arena, player);
+        return {
+          arena: newArena,
+          player: {
+            pos: { x: player.pos.x, y: 0 },
+            matrix: player.matrix
+          }
+        };
+      } else {
+        return {
+          ...state,
+          player: {
+            pos: { x: player.pos.x, y: player.pos.y + 1 },
+            matrix: player.matrix
+          }
+        };
+      }
     default:
       return new Error();
   }
@@ -24,15 +106,17 @@ const playerReducer = (state, action) => {
 
 const TetrisAnother = () => {
   const board = useRef(null);
-  const [arena, setArena] = useState();
   const [canvas, setCanvas] = useState();
   const [drawingBoardContext, setDrawingBoardContext] = useState();
 
   const matrix = [[0, 0, 0], [1, 1, 1], [0, 1, 0]];
 
-  const [player, dispatchPlayer] = useReducer(playerReducer, {
-    pos: { x: 5, y: 5 },
-    matrix: matrix
+  const [game, dispatchPlayer] = useReducer(gameReducer, {
+    player: {
+      pos: { x: 1, y: 14 },
+      matrix: matrix
+    },
+    arena: createArena(10, 18)
   });
 
   useEffect(() => {
@@ -47,8 +131,6 @@ const TetrisAnother = () => {
 
     context.scale(20, 20);
     setDrawingBoardContext(context);
-
-    setArena(createMatrix(10, 18));
   }, []);
 
   useEffect(() => {
@@ -60,33 +142,10 @@ const TetrisAnother = () => {
     };
   });
 
-  const collide = (arena, player) => {
-    // Iterate over player
-    const [m, o] = [player.matrix, player.pos];
-    for (let y = 0; y < m.length; ++y) {
-      for (let x = 0; x < m[y].length; ++x) {
-        if (
-          m[y][x] !== 0 &&
-          (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0
-        ) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  };
-
   const draw = () => {
     drawingBoardContext.fillStyle = "#000";
     drawingBoardContext.fillRect(0, 0, canvas.width, canvas.height);
-    drawMatrix(matrix, player.pos);
-  };
-
-  const drop = () => {
-    dispatchPlayer({
-      type: "GRAVITY"
-    });
+    drawMatrix(game.player.matrix, game.player.pos);
   };
 
   const drawMatrix = (matrix, offset) => {
@@ -100,24 +159,10 @@ const TetrisAnother = () => {
     });
   };
 
-  const createMatrix = (width, height) => {
-    const matrix = [];
-    while (height !== 0) {
-      matrix.push(new Array(width).fill(0));
-      height -= 1;
-    }
-    return matrix;
-  };
-
-  const merge = (arena, player) => {
-    player.matrix.forEach((row, y) => {
-      row.forEach((value, x) => {
-        if (value !== 0) {
-          arena[y + player.pos.y][x + player.pos.x] = value;
-        }
-      });
+  const drop = () => {
+    dispatchPlayer({
+      type: "GRAVITY"
     });
-    setArena(arena);
   };
 
   const handleKeyPress = event => {
@@ -126,7 +171,7 @@ const TetrisAnother = () => {
         dispatchPlayer({
           type: "MOVE_LEFT",
           payload: {
-            x: player.pos.x - 1
+            x: game.player.pos.x - 1
           }
         });
         break;
@@ -142,26 +187,26 @@ const TetrisAnother = () => {
         dispatchPlayer({
           type: "MOVE_RIGHT",
           payload: {
-            x: player.pos.x + 1
+            x: game.player.pos.x + 1
           }
         });
 
         break;
       case 40:
-        let bottomCollided = collide(arena, player);
-        if (bottomCollided) console.log("BOTTOM COLLIDED");
-        // if collided
-        // move back player
-        if (bottomCollided) {
-          merge(arena, player);
-        }
-        // merge arena and player
-        // playerBack to TOP -> RENDER NEW PIECE!
-        if (!bottomCollided) {
-          dispatchPlayer({
-            type: "DROP"
-          });
-        }
+        // let bottomCollided = collide(arena, game.player);
+        // if (bottomCollided) console.log("BOTTOM COLLIDED");
+        // // if collided
+        // // move back player
+        // if (bottomCollided) {
+        //   merge(arena, game.player);
+        // }
+        // // merge arena and player
+        // // playerBack to TOP -> RENDER NEW PIECE!
+        // if (!bottomCollided) {
+        //   dispatchPlayer({
+        //     type: "DROP"
+        //   });
+        // }
 
         break;
       case 68:
