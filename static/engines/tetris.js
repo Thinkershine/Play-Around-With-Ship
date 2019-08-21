@@ -8,8 +8,8 @@ const matrix = [[0, 0, 0], [1, 1, 1], [0, 1, 0]];
 function collide(arena, player) {
   const matrix = player.matrix;
   const offset = player.pos;
-  for (let y = 0; y < matrix.length; ++y) {
-    for (let x = 0; x < matrix[y].length; ++x) {
+  for (let y = 0; y < matrix.length; y += 1) {
+    for (let x = 0; x < matrix[y].length; x += 1) {
       if (
         matrix[y][x] !== 0 &&
         (arena[y + offset.y] && arena[y + offset.y][x + offset.x]) !== 0
@@ -68,6 +68,13 @@ function playerDrop() {
   dropCounter = 0;
 }
 
+function playerMove(dir) {
+  player.pos.x += dir;
+  if (collide(arena, player)) {
+    player.pos.x -= dir;
+  }
+}
+
 let dropCounter = 0;
 let dropInterval = 1000;
 
@@ -97,12 +104,12 @@ update();
 const handleKeyPress = event => {
   switch (event.keyCode) {
     case 37:
-      player.pos.x -= 1;
+      playerMove(-1);
       break;
     case 38:
       break;
     case 39:
-      player.pos.x += 1;
+      playerMove(1);
       break;
     case 40:
       playerDrop();
