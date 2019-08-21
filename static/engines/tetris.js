@@ -5,6 +5,15 @@ context.scale(20, 20);
 
 const matrix = [[0, 0, 0], [1, 1, 1], [0, 1, 0]];
 
+function createArena(width, height) {
+  const matrix = [];
+  while (height !== 0) {
+    matrix.push(new Array(width).fill(0));
+    height -= 1;
+  }
+  return matrix;
+}
+
 function draw() {
   context.fillStyle = "#000";
   context.fillRect(0, 0, canvas.width, canvas.height);
@@ -43,6 +52,8 @@ function update(time = 0) {
   draw();
   requestAnimationFrame(update);
 }
+
+const arena = createArena(12, 20);
 
 const player = {
   pos: { x: 5, y: 5 },
