@@ -18,7 +18,12 @@ function drawMatrix(matrix, offset) {
   });
 }
 
-drawMatrix(matrix, { x: 5, y: 5 });
+const player = {
+  pos: { x: 5, y: 5 },
+  matrix: matrix
+};
+
+drawMatrix(player.matrix, player.pos);
 
 const handleKeyPress = event => {
   switch (event.keyCode) {
