@@ -5,6 +5,20 @@ context.scale(20, 20);
 
 const matrix = [[0, 0, 0], [1, 1, 1], [0, 1, 0]];
 
+function arenaSweep() {
+  outer: for (let y = arena.length - 1; y > 0; y -= 1) {
+    for (let x = 0; x < arena[y].length; x += 1) {
+      if (arena[y][x] === 0) {
+        continue outer;
+      }
+    }
+
+    const row = arena.splice(y, 1)[0].fill(0);
+    arena.unshift(row);
+    y += 1;
+  }
+}
+
 function collide(arena, player) {
   const matrix = player.matrix;
   const offset = player.pos;
@@ -83,6 +97,7 @@ function playerDrop() {
     player.pos.y -= 1;
     merge(arena, player);
     playerReset();
+    arenaSweep();
   }
   dropCounter = 0;
 }
