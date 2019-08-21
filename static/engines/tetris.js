@@ -5,6 +5,24 @@ context.scale(20, 20);
 
 const matrix = [[0, 0, 0], [1, 1, 1], [0, 1, 0]];
 
+function collide(arena, player) {
+  const [matrix, offset] = [player.matrix, player.pos];
+  for (let y = 0; y < matrix.length; ++y) {
+    for (let x = 0; x < matrix[y].length; ++x) {
+      console.log("ARENA AT COLLISION", arena[y + offset.y]);
+      if (
+        matrix[y][x] !== 0 &&
+        (arena[y + offset.y] && arena[y + offset.y][x + offset.x] !== 0)
+      ) {
+        console.log("COLLIDED");
+        return true;
+      }
+    }
+  }
+  console.log("DIDNT COLLIDED");
+  return false;
+}
+
 function createArena(width, height) {
   const matrix = [];
   while (height !== 0) {
@@ -17,6 +35,7 @@ function createArena(width, height) {
 function draw() {
   context.fillStyle = "#000";
   context.fillRect(0, 0, canvas.width, canvas.height);
+  drawMatrix(arena, { x: 0, y: 0 });
   drawMatrix(player.matrix, player.pos);
 }
 
@@ -43,6 +62,11 @@ function merge(arena, player) {
 
 function playerDrop() {
   player.pos.y += 1;
+  if (collide(arena, player)) {
+    player.pos.y -= 1;
+    merge(arena, player);
+    player.pos.y = 0;
+  }
   dropCounter = 0;
 }
 
