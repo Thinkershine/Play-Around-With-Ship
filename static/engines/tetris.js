@@ -6,6 +6,7 @@ context.scale(20, 20);
 const matrix = [[0, 0, 0], [1, 1, 1], [0, 1, 0]];
 
 function arenaSweep() {
+  let rowCount = 1;
   outer: for (let y = arena.length - 1; y > 0; y -= 1) {
     for (let x = 0; x < arena[y].length; x += 1) {
       if (arena[y][x] === 0) {
@@ -16,6 +17,9 @@ function arenaSweep() {
     const row = arena.splice(y, 1)[0].fill(0);
     arena.unshift(row);
     y += 1;
+
+    player.score += rowCount * 10;
+    rowCount *= 2;
   }
 }
 
@@ -98,6 +102,7 @@ function playerDrop() {
     merge(arena, player);
     playerReset();
     arenaSweep();
+    updateScore();
   }
   dropCounter = 0;
 }
@@ -118,6 +123,8 @@ function playerReset() {
 
   if (collide(arena, player)) {
     arena.forEach(row => row.fill(0));
+    player.score = 0;
+    updateScore();
   }
 }
 
@@ -166,6 +173,10 @@ function update(time = 0) {
   requestAnimationFrame(update);
 }
 
+function updateScore() {
+  document.getElementById("score").innerText = player.score;
+}
+
 const colors = [
   null,
   "#FF0D72",
@@ -181,10 +192,9 @@ const arena = createArena(12, 20);
 
 const player = {
   pos: { x: 5, y: 5 },
-  matrix: createPiece("I")
+  matrix: null,
+  score: 0
 };
-
-update();
 
 const handleKeyPress = event => {
   switch (event.keyCode) {
@@ -212,3 +222,7 @@ const handleKeyPress = event => {
 };
 
 document.addEventListener("keydown", handleKeyPress);
+
+playerReset();
+updateScore();
+update();

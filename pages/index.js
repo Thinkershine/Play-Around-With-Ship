@@ -11,6 +11,7 @@ const Index = () => {
       <div>
         <canvas id="tetris" width="240" height="400" />
       </div>
+      <p id="score" />
       <script src="/static/engines/tetris.js" />
     </div>
   );
