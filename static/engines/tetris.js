@@ -50,12 +50,15 @@ update();
 const handleKeyPress = event => {
   switch (event.keyCode) {
     case 37:
+      player.pos.x -= 1;
       break;
     case 38:
       break;
     case 39:
+      player.pos.x += 1;
       break;
     case 40:
+      player.pos.y += 1;
       break;
     case 68:
       break;
