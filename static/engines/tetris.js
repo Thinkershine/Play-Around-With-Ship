@@ -22,6 +22,11 @@ function drawMatrix(matrix, offset) {
   });
 }
 
+function playerDrop() {
+  player.pos.y += 1;
+  dropCounter = 0;
+}
+
 let dropCounter = 0;
 let dropInterval = 1000;
 
@@ -32,8 +37,7 @@ function update(time = 0) {
 
   dropCounter += deltaTime;
   if (dropCounter > dropInterval) {
-    player.pos.y += 1;
-    dropCounter = 0;
+    playerDrop();
   }
 
   draw();
@@ -58,7 +62,7 @@ const handleKeyPress = event => {
       player.pos.x += 1;
       break;
     case 40:
-      player.pos.y += 1;
+      playerDrop();
       break;
     case 68:
       break;
