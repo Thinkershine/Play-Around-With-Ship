@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import { version } from "../package.json";
 
 const Tetris = () => {
   return (
@@ -19,6 +20,17 @@ const Tetris = () => {
             canvas {
               border: 1px solid #fff;
             }
+            .version {
+                font-size: 0.5em;
+                color:rgba(255, 255, 255, 0.1);
+                font-weight: bold;
+                position: absolute;
+                bottom: 0px;
+            }
+            .version:hover {
+                color:rgba(255, 255, 255, 1);
+                cursor: pointer;
+            }
           `}
         </style>
       </Head>
@@ -27,6 +39,7 @@ const Tetris = () => {
         <canvas id="tetris" width="240" height="400" />
       </div>
       <p id="score">0</p>
+      <p className="version">V {version}</p>
       <script src="/static/engines/tetris.js" />
     </>
   );

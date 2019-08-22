@@ -3,8 +3,6 @@ const context = canvas.getContext("2d");
 
 context.scale(20, 20);
 
-const matrix = [[0, 0, 0], [1, 1, 1], [0, 1, 0]];
-
 function arenaSweep() {
   let rowCount = 1;
   outer: for (let y = arena.length - 1; y > 0; y -= 1) {
