@@ -1,8 +1,3 @@
-const canvas = document.getElementById("tetris");
-const context = canvas.getContext("2d");
-
-context.scale(20, 20);
-
 function createPiece(type) {
   switch (type) {
     case "T":
@@ -22,39 +17,15 @@ function createPiece(type) {
   }
 }
 
-let lastTime = 0;
-function update(time = 0) {
-  const deltaTime = time - lastTime;
-  lastTime = time;
-
-  player.update(deltaTime);
-
-  tetris.draw();
-  requestAnimationFrame(update);
-}
-
 function updateScore() {
-  document.getElementById("score").innerText = player.score;
+  document.getElementById("score").innerText = tetris.player.score;
 }
 
-const colors = [
-  null,
-  "#FF0D72",
-  "#0DC2FF",
-  "#0DFF72",
-  "#F538FF",
-  "#FF8E0D",
-  "#FFE138",
-  "#3877FF"
-];
-
-const tetris = new Tetris();
-
-const arena = new Arena(12, 20);
-
-const player = new TetrisPlayer();
+const canvas = document.getElementById("tetris");
+const tetris = new Tetris(canvas);
 
 const handleKeyPress = event => {
+  const player = tetris.player;
   switch (event.keyCode) {
     case 37:
       player.move(-1);
@@ -81,6 +52,4 @@ const handleKeyPress = event => {
 
 document.addEventListener("keydown", handleKeyPress);
 
-player.reset();
 updateScore();
-update();
