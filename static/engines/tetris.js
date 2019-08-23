@@ -93,18 +93,6 @@ function merge(arena, player) {
   });
 }
 
-function playerDrop() {
-  player.pos.y += 1;
-  if (collide(arena, player)) {
-    player.pos.y -= 1;
-    merge(arena, player);
-    playerReset();
-    arenaSweep();
-    updateScore();
-  }
-  dropCounter = 0;
-}
-
 function playerReset() {
   const pieces = "ILJOTSZ";
   player.matrix = createPiece(pieces[(pieces.length * Math.random()) | 0]);
@@ -132,18 +120,12 @@ function rotate(matrix, dir) {
   }
 }
 
-let dropCounter = 0;
-let dropInterval = 1000;
-
 let lastTime = 0;
 function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
 
-  dropCounter += deltaTime;
-  if (dropCounter > dropInterval) {
-    playerDrop();
-  }
+  player.update(deltaTime);
 
   draw();
   requestAnimationFrame(update);
@@ -179,7 +161,7 @@ const handleKeyPress = event => {
       player.move(1);
       break;
     case 40:
-      playerDrop();
+      player.drop();
       break;
     case 81:
       player.rotate(-1);
