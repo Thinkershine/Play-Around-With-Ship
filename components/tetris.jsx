@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import { version } from "../package.json";
 
@@ -8,7 +8,7 @@ const Tetris = () => {
       <Head>
         <title>Tetris</title>
 
-        <style jsx-global>
+        <style jsx-global="true">
           {`
             body {
               background: #202028;
