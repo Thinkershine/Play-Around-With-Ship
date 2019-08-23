@@ -20,10 +20,10 @@ class TetrisPlayer {
     this.matrix = createPiece(pieces[(pieces.length * Math.random()) | 0]);
     this.pos.y = 0;
     this.pos.x =
-      ((arena[0].length / 2) | 0) - ((this.matrix[0].length / 2) | 0);
+      ((arena.matrix[0].length / 2) | 0) - ((this.matrix[0].length / 2) | 0);
 
     if (collide(arena, this)) {
-      arena.forEach(row => row.fill(0));
+      arena.clear();
       this.score = 0;
       updateScore();
     }
@@ -61,9 +61,9 @@ class TetrisPlayer {
     this.pos.y += 1;
     if (collide(arena, this)) {
       this.pos.y -= 1;
-      merge(arena, this);
+      arena.merge(this);
       this.reset();
-      arenaSweep();
+      arena.sweep();
       updateScore();
     }
     this.dropCounter = 0;

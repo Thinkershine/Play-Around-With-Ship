@@ -3,24 +3,6 @@ const context = canvas.getContext("2d");
 
 context.scale(20, 20);
 
-function arenaSweep() {
-  let rowCount = 1;
-  outer: for (let y = arena.length - 1; y > 0; y -= 1) {
-    for (let x = 0; x < arena[y].length; x += 1) {
-      if (arena[y][x] === 0) {
-        continue outer;
-      }
-    }
-
-    const row = arena.splice(y, 1)[0].fill(0);
-    arena.unshift(row);
-    y += 1;
-
-    player.score += rowCount * 10;
-    rowCount *= 2;
-  }
-}
-
 function collide(arena, player) {
   const matrix = player.matrix;
   const offset = player.pos;
@@ -28,22 +10,14 @@ function collide(arena, player) {
     for (let x = 0; x < matrix[y].length; x += 1) {
       if (
         matrix[y][x] !== 0 &&
-        (arena[y + offset.y] && arena[y + offset.y][x + offset.x]) !== 0
+        (arena.matrix[y + offset.y] &&
+          arena.matrix[y + offset.y][x + offset.x]) !== 0
       ) {
         return true;
       }
     }
   }
   return false;
-}
-
-function createArena(width, height) {
-  const matrix = [];
-  while (height !== 0) {
-    matrix.push(new Array(width).fill(0));
-    height -= 1;
-  }
-  return matrix;
 }
 
 function createPiece(type) {
@@ -68,7 +42,7 @@ function createPiece(type) {
 function draw() {
   context.fillStyle = "#000";
   context.fillRect(0, 0, canvas.width, canvas.height);
-  drawMatrix(arena, { x: 0, y: 0 });
+  drawMatrix(arena.matrix, { x: 0, y: 0 });
   drawMatrix(player.matrix, player.pos);
 }
 
@@ -78,16 +52,6 @@ function drawMatrix(matrix, offset) {
       if (value !== 0) {
         context.fillStyle = colors[value];
         context.fillRect(x + offset.x, y + offset.y, 1, 1);
-      }
-    });
-  });
-}
-
-function merge(arena, player) {
-  player.matrix.forEach((row, y) => {
-    row.forEach((value, x) => {
-      if (value !== 0) {
-        arena[y + player.pos.y][x + player.pos.x] = value;
       }
     });
   });
@@ -119,7 +83,7 @@ const colors = [
   "#3877FF"
 ];
 
-const arena = createArena(12, 20);
+const arena = new Arena(12, 20);
 
 const player = new TetrisPlayer();
 
