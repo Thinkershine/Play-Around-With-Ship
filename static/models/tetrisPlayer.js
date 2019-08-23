@@ -1,10 +1,13 @@
 class TetrisPlayer {
   constructor(tetris) {
+    this.DROP_SLOW = 1000;
+    this.DROP_FAST = 50;
+
     this.tetris = tetris;
     this.arena = tetris.arena;
 
     this.dropCounter = 0;
-    this.dropInterval = 1000;
+    this.dropInterval = this.DROP_SLOW;
 
     this.pos = { x: 5, y: 5 };
     this.matrix = null;
@@ -69,8 +72,8 @@ class TetrisPlayer {
       this.pos.y -= 1;
       this.arena.merge(this);
       this.reset();
-      this.arena.sweep();
-      updateScore();
+      this.score += this.arena.sweep();
+      this.tetris.updateScore(this.score);
     }
     this.dropCounter = 0;
   }

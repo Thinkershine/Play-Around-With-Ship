@@ -31,14 +31,27 @@ const Tetris = () => {
                 color:rgba(255, 255, 255, 1);
                 cursor: pointer;
             }
+            .gameBoard {
+              display: flex;
+            }
+            .player {
+              flex: 1 1 auto;
+            }
           `}
         </style>
       </Head>
       <h1>Crypto Blocks</h1>
-      <div>
-        <canvas id="tetris" width="240" height="400" />
+      <div className="gameBoard">
+        <div className="player">
+          <div className="score">0</div>
+          <canvas id="tetris" width="240" height="400" />
+        </div>
+
+        <div className="player">
+          <div className="score">0</div>
+          <canvas id="tetris" width="240" height="400" />
+        </div>
       </div>
-      <p id="score">0</p>
       <p className="version">V {version}</p>
       <script src="/static/models/tetrisArena.js" />
       <script src="/static/models/tetrisPlayer.js" />
