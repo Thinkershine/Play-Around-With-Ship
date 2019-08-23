@@ -12,6 +12,22 @@ class Arena {
     this.matrix.forEach(row => row.fill(0));
   }
 
+  collide(player) {
+    const [matrix, offset] = [player.matrix, player.pos];
+    for (let y = 0; y < matrix.length; y += 1) {
+      for (let x = 0; x < matrix[y].length; x += 1) {
+        if (
+          matrix[y][x] !== 0 &&
+          (this.matrix[y + offset.y] &&
+            this.matrix[y + offset.y][x + offset.x]) !== 0
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   merge(player) {
     player.matrix.forEach((row, y) => {
       row.forEach((value, x) => {

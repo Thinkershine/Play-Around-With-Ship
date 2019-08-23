@@ -3,23 +3,6 @@ const context = canvas.getContext("2d");
 
 context.scale(20, 20);
 
-function collide(arena, player) {
-  const matrix = player.matrix;
-  const offset = player.pos;
-  for (let y = 0; y < matrix.length; y += 1) {
-    for (let x = 0; x < matrix[y].length; x += 1) {
-      if (
-        matrix[y][x] !== 0 &&
-        (arena.matrix[y + offset.y] &&
-          arena.matrix[y + offset.y][x + offset.x]) !== 0
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
 function createPiece(type) {
   switch (type) {
     case "T":
