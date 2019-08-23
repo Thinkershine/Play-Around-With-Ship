@@ -32,7 +32,7 @@ class TetrisPlayer {
   rotate(dir) {
     const pos = this.pos.x;
     let offset = 1;
-    rotate(this.matrix, dir);
+    this._rotateMatrix(this.matrix, dir);
     while (collide(arena, this)) {
       this.pos.x += offset;
       offset = -(offset + (offset > 0 ? 1 : -1));
@@ -41,6 +41,19 @@ class TetrisPlayer {
         this.pos.x = pos;
         return;
       }
+    }
+  }
+
+  _rotateMatrix(matrix, dir) {
+    for (let y = 0; y < matrix.length; y += 1) {
+      for (let x = 0; x < y; x += 1) {
+        [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+      }
+    }
+    if (dir > 0) {
+      matrix.forEach(row => row.reverse());
+    } else {
+      matrix.reverse();
     }
   }
 

@@ -93,19 +93,6 @@ function merge(arena, player) {
   });
 }
 
-function rotate(matrix, dir) {
-  for (let y = 0; y < matrix.length; y += 1) {
-    for (let x = 0; x < y; x += 1) {
-      [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
-    }
-  }
-  if (dir > 0) {
-    matrix.forEach(row => row.reverse());
-  } else {
-    matrix.reverse();
-  }
-}
-
 let lastTime = 0;
 function update(time = 0) {
   const deltaTime = time - lastTime;
