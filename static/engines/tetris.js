@@ -188,11 +188,7 @@ const colors = [
 
 const arena = createArena(12, 20);
 
-const player = {
-  pos: { x: 5, y: 5 },
-  matrix: null,
-  score: 0
-};
+const player = new TetrisPlayer();
 
 const handleKeyPress = event => {
   switch (event.keyCode) {
