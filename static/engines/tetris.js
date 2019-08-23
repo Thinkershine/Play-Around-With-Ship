@@ -105,13 +105,6 @@ function playerDrop() {
   dropCounter = 0;
 }
 
-function playerMove(dir) {
-  player.pos.x += dir;
-  if (collide(arena, player)) {
-    player.pos.x -= dir;
-  }
-}
-
 function playerReset() {
   const pieces = "ILJOTSZ";
   player.matrix = createPiece(pieces[(pieces.length * Math.random()) | 0]);
@@ -193,12 +186,12 @@ const player = new TetrisPlayer();
 const handleKeyPress = event => {
   switch (event.keyCode) {
     case 37:
-      playerMove(-1);
+      player.move(-1);
       break;
     case 38:
       break;
     case 39:
-      playerMove(1);
+      player.move(1);
       break;
     case 40:
       playerDrop();
