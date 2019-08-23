@@ -42,7 +42,8 @@ const Tetris = () => {
       <p className="version">V {version}</p>
       <script src="/static/models/tetrisArena.js" />
       <script src="/static/models/tetrisPlayer.js" />
-      <script src="/static/engines/tetris.js" />
+      <script src="/static/models/tetris.js" />
+      <script src="/static/engines/tetrisEngine.js" />
     </>
   );
 };
