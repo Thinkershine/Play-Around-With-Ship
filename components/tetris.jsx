@@ -53,6 +53,10 @@ const Tetris = () => {
         </div>
       </div>
       <p className="version">V {version}</p>
+      <h2>Portfolio</h2>
+      <p>
+        <img src="/static/graphics/1.svg" />
+      </p>
       <script src="/static/models/tetrisArena.js" />
       <script src="/static/models/tetrisPlayer.js" />
       <script src="/static/models/tetris.js" />
