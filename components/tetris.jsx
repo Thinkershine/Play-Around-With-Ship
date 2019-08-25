@@ -121,7 +121,7 @@ const Tetris = () => {
             </ul>
             <div className="score">SCORE : 0</div>
           </div>
-          <canvas id="tetris" width="240" height="400" />
+          <canvas id="tetris" width="480" height="800" />
         </div>
 
         <div className="player">
@@ -180,7 +180,8 @@ const Tetris = () => {
             </ul>
             <div className="score">SCORE : 0</div>
           </div>
-          <canvas id="tetris" width="240" height="400" />
+          {/* <canvas id="tetris" width="240" height="400" /> */}
+          <canvas id="tetris" width="480" height="800" />
         </div>
       </div>
       <p className="version">V {version}</p>

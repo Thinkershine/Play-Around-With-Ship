@@ -12,7 +12,7 @@ class Tetris {
     this.element = element;
     this.canvas = element.querySelector("canvas");
     this.context = this.canvas.getContext("2d");
-    this.context.scale(20, 20);
+    this.context.scale(40, 40);
 
     this.arena = new Arena(12, 20);
     this.player = new TetrisPlayer(this);

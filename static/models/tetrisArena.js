@@ -125,6 +125,9 @@ class Arena {
       y += 1;
 
       cryptoScore.score += rowCount * 10;
+      cryptoScore.btc += rowCount * 1; // Only If BTC Was There ... ??
+      // hmmm ?? HOW ?? // HOW TO ADD ONLY COINS THAT WERE DISCOVERED INSIDE A BLOCK ?/
+
       rowCount *= 2;
     }
 
