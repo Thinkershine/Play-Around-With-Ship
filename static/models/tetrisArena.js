@@ -51,32 +51,83 @@ class Arena {
       vtc: 0,
       xmr: 0
     };
+
+    let previousBlock = "";
+    let currentBlock = "";
+    let wholeLineCounter = 0;
+
     outer: for (let y = this.matrix.length - 1; y > 0; y -= 1) {
+      previousBlock = "";
+      wholeLineCounter = 0;
       for (let x = 0; x < this.matrix[y].length; x += 1) {
         switch (this.matrix[y][x]) {
           case 0:
             continue outer;
           case 1:
-            cryptoScore.btc += 1;
+            cryptoScore.btc += 1 * rowCount;
+            currentBlock = "btc";
             break;
           case 2:
-            cryptoScore.eth += 1;
+            cryptoScore.eth += 1 * rowCount;
+            currentBlock = "eth";
             break;
           case 3:
-            cryptoScore.ltc += 1;
+            cryptoScore.ltc += 1 * rowCount;
+            currentBlock = "ltc";
             break;
           case 4:
-            cryptoScore.trx += 1;
+            cryptoScore.trx += 1 * rowCount;
+            currentBlock = "trx";
             break;
           case 5:
-            cryptoScore.usdt += 1;
+            cryptoScore.usdt += 1 * rowCount;
+            currentBlock = "usdt";
             break;
           case 6:
-            cryptoScore.vtc += 1;
+            cryptoScore.vtc += 1 * rowCount;
+            currentBlock = "vtc";
             break;
           case 7:
-            cryptoScore.xmr += 1;
+            cryptoScore.xmr += 1 * rowCount;
+            currentBlock = "xmr";
             break;
+        }
+
+        if (previousBlock === "") {
+          previousBlock = currentBlock;
+          wholeLineCounter += 1;
+        } else {
+          if (currentBlock === previousBlock) {
+            wholeLineCounter += 1;
+          }
+        }
+
+        const wholeLine = 12;
+        if (wholeLineCounter == wholeLine) {
+          // ADD BONUS To Block Reward
+          switch (previousBlock) {
+            case "btc":
+              cryptoScore.btc += wholeLine * rowCount;
+              break;
+            case "eth":
+              cryptoScore.eth += wholeLine * rowCount;
+              break;
+            case "ltc":
+              cryptoScore.ltc += wholeLine * rowCount;
+              break;
+            case "trx":
+              cryptoScore.trx += wholeLine * rowCount;
+              break;
+            case "usdt":
+              cryptoScore.usdt += wholeLine * rowCount;
+              break;
+            case "vtc":
+              cryptoScore.vtc += wholeLine * rowCount;
+              break;
+            case "xmr":
+              cryptoScore.xmr += wholeLine * rowCount;
+              break;
+          }
         }
       }
 
