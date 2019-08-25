@@ -41,9 +41,9 @@ const Tetris = () => {
               flex: 1 1 auto;
             }
 
-#portfolio-score {
-  float: left;
-}
+            #portfolio-score {
+              float: left;
+            }
 
             #portfolio {
               list-style: none;

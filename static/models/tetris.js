@@ -4,7 +4,6 @@ class Tetris {
 
     let blockTypes = 8;
     for (let i = 0; i < blockTypes; i += 1) {
-      console.log("ADD IMG", i);
       let newImage = new Image(2, 2);
       newImage.src = "/static/graphics/" + i + ".svg";
       this.images.push(newImage);

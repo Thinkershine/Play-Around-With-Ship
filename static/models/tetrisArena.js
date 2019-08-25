@@ -40,11 +40,43 @@ class Arena {
 
   sweep() {
     let rowCount = 1;
-    let score = 0;
+
+    let cryptoScore = {
+      score: 0,
+      btc: 0,
+      eth: 0,
+      ltc: 0,
+      trx: 0,
+      usdt: 0,
+      vtc: 0,
+      xmr: 0
+    };
     outer: for (let y = this.matrix.length - 1; y > 0; y -= 1) {
       for (let x = 0; x < this.matrix[y].length; x += 1) {
-        if (this.matrix[y][x] === 0) {
-          continue outer;
+        switch (this.matrix[y][x]) {
+          case 0:
+            continue outer;
+          case 1:
+            cryptoScore.btc += 1;
+            break;
+          case 2:
+            cryptoScore.eth += 1;
+            break;
+          case 3:
+            cryptoScore.ltc += 1;
+            break;
+          case 4:
+            cryptoScore.trx += 1;
+            break;
+          case 5:
+            cryptoScore.usdt += 1;
+            break;
+          case 6:
+            cryptoScore.vtc += 1;
+            break;
+          case 7:
+            cryptoScore.xmr += 1;
+            break;
         }
       }
 
@@ -52,9 +84,11 @@ class Arena {
       this.matrix.unshift(row);
       y += 1;
 
-      score += rowCount * 10;
+      cryptoScore.score += rowCount * 10;
       rowCount *= 2;
     }
-    return score;
+
+    console.log("CRYPTO SCORE", cryptoScore);
+    return cryptoScore.score;
   }
 }
