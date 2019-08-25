@@ -17,8 +17,9 @@ const Tetris = () => {
               font-size: 2em;
               text-align: center;
             }
-            h2 {
+            h1, h2 {
               margin: 0;
+              padding: 5px;
             }
             canvas {
               border: 1px solid #fff;
@@ -59,6 +60,9 @@ const Tetris = () => {
             .coin-icon {
               margin-right: 5px;
               margin-left: 5px;
+            }
+            .score {
+              font-size: 2em;
             }
           `}
         </style>
