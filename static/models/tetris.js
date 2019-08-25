@@ -66,7 +66,6 @@ class Tetris {
         if (value !== 0) {
           this.context.fillStyle = this.colors[value];
           this.context.fillRect(x + offset.x, y + offset.y, 1, 1);
-          // console.log("VALUE", value);
           this.drawImage(value, { x: x + offset.x, y: y + offset.y });
         }
       });
@@ -74,40 +73,10 @@ class Tetris {
   }
 
   drawImage(currency, pos) {
-    // console.log("Render Currency", currency);
-    // console.log("IMAGE AT", this.images[currency]);
     this.context.drawImage(this.images[currency], pos.x, pos.y, 1, 1);
-    // switch (currency) {
-    //   case 1:
-    //     this.context.drawImage(this.images[currency], pos.x, pos.y, 1, 1);
-    //     return;
-    //   case 2:
-    //     this.context.drawImage(this.images[currency], pos.x, pos.y, 1, 1);
-    //     return;
-    //   case "ltc":
-    //     this.context.drawImage(this.images[currency], pos.x, pos.y, 1, 1);
-    //     return;
-    //   case "trx":
-    //     this.context.drawImage(this.images[currency], pos.x, pos.y, 1, 1);
-    //     return;
-    //   case "usdt":
-    //     this.context.drawImage(this.images[0], pos.x, pos.y, 1, 1);
-    //     return;
-    //   case "vtc":
-    //     this.context.drawImage(this.images[0], pos.x, pos.y, 1, 1);
-    //     return;
-    //   case "xrp":
-    //     this.context.drawImage(this.images[0], pos.x, pos.y, 1, 1);
-    //     return;
-    //   case "xmr":
-    //     return;
-    //   default:
-    //     this.context.fillStyle = this.colors[0];
-    //     this.context.fillRect(pos.x, pos.y, 1, 1);
-    // }
   }
 
   updateScore(score) {
-    this.element.querySelector(".score").innerText = score;
+    this.element.querySelector(".score").innerText = "SCORE : " + score;
   }
 }
