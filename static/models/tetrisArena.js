@@ -38,19 +38,8 @@ class Arena {
     });
   }
 
-  sweep() {
+  sweep(cryptoScore) {
     let rowCount = 1;
-
-    let cryptoScore = {
-      score: 0,
-      btc: 0,
-      eth: 0,
-      ltc: 0,
-      trx: 0,
-      usdt: 0,
-      vtc: 0,
-      xmr: 0
-    };
 
     let previousBlock = "";
     let currentBlock = "";
@@ -139,7 +128,6 @@ class Arena {
       rowCount *= 2;
     }
 
-    console.log("CRYPTO SCORE", cryptoScore);
-    return cryptoScore.score;
+    return cryptoScore;
   }
 }

@@ -11,7 +11,16 @@ class TetrisPlayer {
 
     this.pos = { x: 5, y: 5 };
     this.matrix = null;
-    this.score = 0;
+    this.cryptoScore = {
+      score: 0,
+      btc: 0,
+      eth: 0,
+      ltc: 0,
+      trx: 0,
+      usdt: 0,
+      vtc: 0,
+      xmr: 0
+    };
 
     this.reset();
   }
@@ -33,8 +42,8 @@ class TetrisPlayer {
 
     if (this.arena.collide(this)) {
       this.arena.clear();
-      this.score = 0;
-      this.tetris.updateScore(this.score);
+      this.cryptoScore.score = 0;
+      this.tetris.updateScore(this.cryptoScore.score);
     }
   }
 
@@ -72,8 +81,9 @@ class TetrisPlayer {
       this.pos.y -= 1;
       this.arena.merge(this);
       this.reset();
-      this.score += this.arena.sweep();
-      this.tetris.updateScore(this.score);
+      this.cryptoScore = this.arena.sweep(this.cryptoScore);
+      console.log("CRYPTO SCORE AT PLAYER", this.cryptoScore);
+      this.tetris.updateScore(this.cryptoScore.score);
     }
     this.dropCounter = 0;
   }
