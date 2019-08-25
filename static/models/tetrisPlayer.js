@@ -43,7 +43,7 @@ class TetrisPlayer {
     if (this.arena.collide(this)) {
       this.arena.clear();
       this.cryptoScore.score = 0;
-      this.tetris.updateScore(this.cryptoScore.score);
+      this.tetris.updateScore(this.cryptoScore);
     }
   }
 
@@ -83,7 +83,7 @@ class TetrisPlayer {
       this.reset();
       this.cryptoScore = this.arena.sweep(this.cryptoScore);
       console.log("CRYPTO SCORE AT PLAYER", this.cryptoScore);
-      this.tetris.updateScore(this.cryptoScore.score);
+      this.tetris.updateScore(this.cryptoScore);
     }
     this.dropCounter = 0;
   }

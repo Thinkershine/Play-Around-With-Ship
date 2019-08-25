@@ -49,7 +49,16 @@ class Tetris {
     };
 
     update();
-    this.updateScore(0);
+    this.updateScore({
+      score: 0,
+      btc: 0,
+      eth: 0,
+      ltc: 0,
+      trx: 0,
+      usdt: 0,
+      vtc: 0,
+      xmr: 0
+    });
   }
 
   draw() {
@@ -75,7 +84,40 @@ class Tetris {
     this.context.drawImage(this.images[currency], pos.x, pos.y, 1, 1);
   }
 
-  updateScore(score) {
-    this.element.querySelector(".score").innerText = "SCORE : " + score;
+  // This Method for Utils Extraction
+  formatCryptoScore(score) {
+    const cryptoPointValue = 0.001;
+    let cryptocurrenciedScore = score * cryptoPointValue;
+    return parseFloat(Math.round(cryptocurrenciedScore * 1000) / 1000).toFixed(
+      4
+    );
+  }
+
+  updateScore(cryptoScore) {
+    this.formatCryptoScore(cryptoScore.eth);
+    console.log("PASSED CRYPTO SCORE TO UPDATE SCORE", cryptoScore);
+    this.element.querySelector(".score").innerText =
+      "SCORE : " + cryptoScore.score;
+    this.element.querySelector(".btc-score").innerText = this.formatCryptoScore(
+      cryptoScore.btc
+    );
+    this.element.querySelector(".eth-score").innerText = this.formatCryptoScore(
+      cryptoScore.eth
+    );
+    this.element.querySelector(".trx-score").innerText = this.formatCryptoScore(
+      cryptoScore.trx
+    );
+    this.element.querySelector(
+      ".usdt-score"
+    ).innerText = this.formatCryptoScore(cryptoScore.usdt);
+    this.element.querySelector(".vtc-score").innerText = this.formatCryptoScore(
+      cryptoScore.vtc
+    );
+    this.element.querySelector(".ltc-score").innerText = this.formatCryptoScore(
+      cryptoScore.ltc
+    );
+    this.element.querySelector(".xmr-score").innerText = this.formatCryptoScore(
+      cryptoScore.xmr
+    );
   }
 }
