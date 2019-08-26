@@ -44,40 +44,43 @@ class Arena {
     let previousBlock = "";
     let currentBlock = "";
     let wholeLineCounter = 0;
+    let countedBlocks = {
+      btc:0,
+      eth:0,
+      ltc:0,
+      trx:0,
+      usdt:0,
+      vtc:0,
+      xmr:0
+    }
 
     outer: for (let y = this.matrix.length - 1; y > 0; y -= 1) {
       previousBlock = "";
       wholeLineCounter = 0;
       for (let x = 0; x < this.matrix[y].length; x += 1) {
+        // Col Loop
         switch (this.matrix[y][x]) {
           case 0:
             continue outer;
           case 1:
-            cryptoScore.btc += 1 * rowCount;
             currentBlock = "btc";
             break;
           case 2:
-            cryptoScore.eth += 1 * rowCount;
             currentBlock = "eth";
             break;
           case 3:
-            cryptoScore.ltc += 1 * rowCount;
             currentBlock = "ltc";
             break;
           case 4:
-            cryptoScore.trx += 1 * rowCount;
             currentBlock = "trx";
             break;
           case 5:
-            cryptoScore.usdt += 1 * rowCount;
             currentBlock = "usdt";
             break;
           case 6:
-            cryptoScore.vtc += 1 * rowCount;
             currentBlock = "vtc";
             break;
           case 7:
-            cryptoScore.xmr += 1 * rowCount;
             currentBlock = "xmr";
             break;
         }
@@ -96,41 +99,83 @@ class Arena {
           // ADD BONUS To Block Reward
           switch (previousBlock) {
             case "btc":
-              cryptoScore.btc += wholeLine * rowCount;
+              cryptoScore.btc += wholeLine;
               break;
             case "eth":
-              cryptoScore.eth += wholeLine * rowCount;
+              cryptoScore.eth += wholeLine;
               break;
             case "ltc":
-              cryptoScore.ltc += wholeLine * rowCount;
+              cryptoScore.ltc += wholeLine;
               break;
             case "trx":
-              cryptoScore.trx += wholeLine * rowCount;
+              cryptoScore.trx += wholeLine;
               break;
             case "usdt":
-              cryptoScore.usdt += wholeLine * rowCount;
+              cryptoScore.usdt += wholeLine;
               break;
             case "vtc":
-              cryptoScore.vtc += wholeLine * rowCount;
+              cryptoScore.vtc += wholeLine;
               break;
             case "xmr":
-              cryptoScore.xmr += wholeLine * rowCount;
+              cryptoScore.xmr += wholeLine;
               break;
           }
         }
       }
 
-      const row = this.matrix.splice(y, 1)[0].fill(0);
+      // If no 0 in any column within a row
+      // Remove completed row
+      const splicedRow = this.matrix.splice(y, 1)[0];
+      const row = splicedRow.map(value => 0);
       this.matrix.unshift(row);
       y += 1;
-
+      
+      // Continue Here and Give points
       cryptoScore.score += rowCount * 10;
-      cryptoScore.btc += rowCount * 1; // Only If BTC Was There ... ??
-      // hmmm ?? HOW ?? // HOW TO ADD ONLY COINS THAT WERE DISCOVERED INSIDE A BLOCK ?/
-
+      
+      countedBlocks = this.countCryptoBlocks(splicedRow, countedBlocks);
+      cryptoScore.btc += rowCount * countedBlocks.btc; 
+      cryptoScore.eth += rowCount * countedBlocks.eth;
+      cryptoScore.ltc += rowCount * countedBlocks.ltc;
+      cryptoScore.trx += rowCount * countedBlocks.trx;
+      cryptoScore.usdt += rowCount * countedBlocks.usdt;
+      cryptoScore.vtc += rowCount * countedBlocks.vtc;
+      cryptoScore.xmr += rowCount * countedBlocks.xmr;
+      
       rowCount *= 2;
     }
 
     return cryptoScore;
+  }
+
+  countCryptoBlocks(finishedRow, countedBlocks) {
+    for(let i = 0; i < finishedRow.length; i += 1) {
+      switch(finishedRow[i]){
+        case 1:
+          countedBlocks.btc += 1;
+          break;
+        case 2:
+          countedBlocks.eth += 1;
+          break;
+        case 3:
+          countedBlocks.ltc += 1;
+          break;
+        case 4:
+          countedBlocks.trx += 1;
+          break;
+        case 5:
+          countedBlocks.usdt += 1;
+          break;
+        case 6:
+          countedBlocks.vtc += 1;
+          break;
+        case 7:
+          countedBlocks.xmr += 1;
+          break;
+
+      }
+    }
+
+    return countedBlocks;
   }
 }
