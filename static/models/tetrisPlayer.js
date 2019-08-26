@@ -48,34 +48,46 @@ class TetrisPlayer {
     }
   }
 
-  setHighScore(){
+  setHighScore() {
     const maximumHighScores = 5;
     const currentHighScores = JSON.parse(localStorage.getItem("HIGHSCORES"));
-    if (currentHighScores !== null){
-      // check if is HighScore
-      for (let i = 0; i < maximumHighScores; i += 1) {
-        if (this.cryptoScore.score > currentHighScores[i])
-        {
-          console.log("CURRENT HIGHT", currentHighScores);
-          
-          // currentHighScores.unshift(this.cryptoScore.score);
-          
-          let temp = currentHighScores[i];
-          currentHighScores[i] = this.cryptoScore;
+    const first = 0;
+    const last = 4;
 
-          let slicedHighScores = currentHighScores.slice(i + 1, maximumHighScores - i);
-          console.log("SCLIDED HIGHSCORES", slicedHighScores);
+    if (currentHighScores === null) {
+      const topFive = new Array(maximumHighScores).fill(0);
+      topFive[first] = this.cryptoScore.score;
+      localStorage.setItem("HIGHSCORES", JSON.stringify(topFive));
+    } else {
+      // Check if NewScore is HighScore
+      if (this.cryptoScore.score > currentHighScores[last]) {
+        outer: for (let i = last; i >= 0; i -= 1) {
+          if (this.cryptoScore.score > currentHighScores[i]) {
+            if (this.cryptoScore.score > currentHighScores[i - 1]) {
+              // It's even higher!
+              continue outer;
+            }
 
-          let tempHighScores = currentHighScores.splice(0, maximumHighScores);
-          console.log("CURRENT HIGHT SCORES AFTER UNSHIFT", currentHighScores);
-          console.log("CURRENT TEMP SCORES ", tempHighScores);
+            // Get All Smaller HighScores
+            let newHighScoreTail = currentHighScores.slice(i);
 
-          localStorage.setItem("HIGHSCORES", JSON.stringify(tempHighScores));
+            // Remove Worst HighScore
+            const poppedHighScore = newHighScoreTail.splice(-1, 1);
+
+            // Add New High Score
+            newHighScoreTail.unshift(this.cryptoScore.score);
+
+            // Create Header from Better HighScores
+            const newHighScoreHeader = currentHighScores.slice(0, i);
+
+            // Combine Header with Tail
+            const newHighScore = newHighScoreHeader.concat(newHighScoreTail);
+
+            // Save New HighScore
+            localStorage.setItem("HIGHSCORES", JSON.stringify(newHighScore));
+          }
         }
       }
-    } else {
-      const topFive = new Array(maximumHighScores).fill(0);
-      localStorage.setItem("HIGHSCORES", JSON.stringify(topFive));
     }
   }
 
@@ -114,7 +126,6 @@ class TetrisPlayer {
       this.arena.merge(this);
       this.reset();
       this.cryptoScore = this.arena.sweep(this.cryptoScore);
-      console.log("CRYPTO SCORE AT PLAYER", this.cryptoScore);
       this.tetris.updateScore(this.cryptoScore);
     }
     this.dropCounter = 0;
