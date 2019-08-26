@@ -42,8 +42,40 @@ class TetrisPlayer {
 
     if (this.arena.collide(this)) {
       this.arena.clear();
+      this.setHighScore();
       this.cryptoScore.score = 0;
       this.tetris.updateScore(this.cryptoScore);
+    }
+  }
+
+  setHighScore(){
+    const maximumHighScores = 5;
+    const currentHighScores = JSON.parse(localStorage.getItem("HIGHSCORES"));
+    if (currentHighScores !== null){
+      // check if is HighScore
+      for (let i = 0; i < maximumHighScores; i += 1) {
+        if (this.cryptoScore.score > currentHighScores[i])
+        {
+          console.log("CURRENT HIGHT", currentHighScores);
+          
+          // currentHighScores.unshift(this.cryptoScore.score);
+          
+          let temp = currentHighScores[i];
+          currentHighScores[i] = this.cryptoScore;
+
+          let slicedHighScores = currentHighScores.slice(i + 1, maximumHighScores - i);
+          console.log("SCLIDED HIGHSCORES", slicedHighScores);
+
+          let tempHighScores = currentHighScores.splice(0, maximumHighScores);
+          console.log("CURRENT HIGHT SCORES AFTER UNSHIFT", currentHighScores);
+          console.log("CURRENT TEMP SCORES ", tempHighScores);
+
+          localStorage.setItem("HIGHSCORES", JSON.stringify(tempHighScores));
+        }
+      }
+    } else {
+      const topFive = new Array(maximumHighScores).fill(0);
+      localStorage.setItem("HIGHSCORES", JSON.stringify(topFive));
     }
   }
 
