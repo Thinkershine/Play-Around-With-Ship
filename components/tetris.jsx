@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import { version } from "../package.json";
+import ls from "local-storage";
 
 const Tetris = () => {
+  const [highScores, setHighScores] = useState(ls.get("HIGHSCORES"));
+
   return (
     <>
       <Head>
@@ -63,6 +66,12 @@ const Tetris = () => {
             }
             .score {
               font-size: 2em;
+            }
+            #high-scores {
+              float: left;
+            }
+            #high-scores ul {
+              list-style: none;
             }
           `}
         </style>
@@ -188,6 +197,14 @@ const Tetris = () => {
           <canvas id="tetris" width="480" height="800" />
         </div>
       </div>
+
+      <div id="high-scores">
+        <h2>HighScores</h2>
+        <ul>
+        {highScores !== null && (displayHighScores(highScores))}
+          
+        </ul>
+      </div>
       <p className="version">V {version}</p>
 
       <script src="/static/models/tetrisArena.js" />
@@ -199,3 +216,10 @@ const Tetris = () => {
 };
 
 export default Tetris;
+
+const displayHighScores = (hs) => {
+var toReturn = hs.map((score, index) => 
+        <li key={score.toString() + index} style={{textAlign: "left"}}><b style={{marginRight: 25}}>{index + 1}</b> {score}</li>
+      )
+      return toReturn;
+}

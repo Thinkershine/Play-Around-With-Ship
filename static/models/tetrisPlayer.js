@@ -42,10 +42,50 @@ class TetrisPlayer {
 
     if (this.arena.collide(this)) {
       this.arena.clear();
-      this.setHighScore();
       this.cryptoScore.score = 0;
       this.tetris.updateScore(this.cryptoScore);
     }
+  }
+
+  rotate(dir) {
+    const pos = this.pos.x;
+    let offset = 1;
+    this._rotateMatrix(this.matrix, dir);
+    while (this.arena.collide(this)) {
+      this.pos.x += offset;
+      offset = -(offset + (offset > 0 ? 1 : -1));
+      if (offset > this.matrix[0].length) {
+        rotate(this.matrix, -dir);
+        this.pos.x = pos;
+        return;
+      }
+    }
+  }
+
+  _rotateMatrix(matrix, dir) {
+    for (let y = 0; y < matrix.length; y += 1) {
+      for (let x = 0; x < y; x += 1) {
+        [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+      }
+    }
+    if (dir > 0) {
+      matrix.forEach(row => row.reverse());
+    } else {
+      matrix.reverse();
+    }
+  }
+
+  drop() {
+    this.pos.y += 1;
+    if (this.arena.collide(this)) {
+      this.pos.y -= 1;
+      this.arena.merge(this);
+      this.reset();
+      this.setHighScore();
+      this.cryptoScore = this.arena.sweep(this.cryptoScore);
+      this.tetris.updateScore(this.cryptoScore);
+    }
+    this.dropCounter = 0;
   }
 
   setHighScore() {
@@ -89,46 +129,6 @@ class TetrisPlayer {
         }
       }
     }
-  }
-
-  rotate(dir) {
-    const pos = this.pos.x;
-    let offset = 1;
-    this._rotateMatrix(this.matrix, dir);
-    while (this.arena.collide(this)) {
-      this.pos.x += offset;
-      offset = -(offset + (offset > 0 ? 1 : -1));
-      if (offset > this.matrix[0].length) {
-        rotate(this.matrix, -dir);
-        this.pos.x = pos;
-        return;
-      }
-    }
-  }
-
-  _rotateMatrix(matrix, dir) {
-    for (let y = 0; y < matrix.length; y += 1) {
-      for (let x = 0; x < y; x += 1) {
-        [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
-      }
-    }
-    if (dir > 0) {
-      matrix.forEach(row => row.reverse());
-    } else {
-      matrix.reverse();
-    }
-  }
-
-  drop() {
-    this.pos.y += 1;
-    if (this.arena.collide(this)) {
-      this.pos.y -= 1;
-      this.arena.merge(this);
-      this.reset();
-      this.cryptoScore = this.arena.sweep(this.cryptoScore);
-      this.tetris.updateScore(this.cryptoScore);
-    }
-    this.dropCounter = 0;
   }
 
   update(deltaTime) {
