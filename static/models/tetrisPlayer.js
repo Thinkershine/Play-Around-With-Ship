@@ -11,16 +11,8 @@ class TetrisPlayer {
 
     this.pos = { x: 5, y: 5 };
     this.matrix = null;
-    this.cryptoScore = {
-      score: 0,
-      btc: 0,
-      eth: 0,
-      ltc: 0,
-      trx: 0,
-      usdt: 0,
-      vtc: 0,
-      xmr: 0
-    };
+    this.cryptoScore = this.getMinedCrypto();
+    this.cryptoScore.score = 0;
 
     this.reset();
   }
@@ -43,6 +35,7 @@ class TetrisPlayer {
     if (this.arena.collide(this)) {
       this.arena.clear();
       this.setHighScore();
+      this.setMinedCrypto();
       this.cryptoScore.score = 0;
       this.tetris.updateScore(this.cryptoScore);
     }
@@ -130,6 +123,31 @@ class TetrisPlayer {
       }
     }
   }
+
+  getMinedCrypto() {
+    const storedMinedCrypto = JSON.parse(localStorage.getItem("MINED_CRYPTO"));
+    if (storedMinedCrypto === null){
+      let newMinedCrypto = this.setMinedCrypto();
+      return newMinedCrypto;
+    } else {
+      return storedMinedCrypto;
+    }
+  }
+
+  setMinedCrypto() {
+       let newMinedCrypto = {
+         btc: this.cryptoScore.btc,
+         eth: this.cryptoScore.eth,
+         trx: this.cryptoScore.trx,
+         usdt: this.cryptoScore.usdt,
+         vtc: this.cryptoScore.vtc,
+         ltc: this.cryptoScore.ltc,
+         xmr: this.cryptoScore.xmr
+       };
+       localStorage.setItem("MINED_CRYPTO", JSON.stringify(newMinedCrypto));
+
+       return newMinedCrypto;
+ }
 
   update(deltaTime) {
     this.dropCounter += deltaTime;
