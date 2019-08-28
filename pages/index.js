@@ -1,10 +1,10 @@
 import React from "react";
-import Tetris from "../components/tetris";
+import Tetrises from "../components/tetrises";
 
 const Index = () => {
   return (
     <div>
-      <Tetris />
+      <Tetrises />
     </div>
   );
 };

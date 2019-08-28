@@ -42,6 +42,7 @@ class TetrisPlayer {
 
     if (this.arena.collide(this)) {
       this.arena.clear();
+      this.setHighScore();
       this.cryptoScore.score = 0;
       this.tetris.updateScore(this.cryptoScore);
     }
@@ -81,7 +82,6 @@ class TetrisPlayer {
       this.pos.y -= 1;
       this.arena.merge(this);
       this.reset();
-      this.setHighScore();
       this.cryptoScore = this.arena.sweep(this.cryptoScore);
       this.tetris.updateScore(this.cryptoScore);
     }
