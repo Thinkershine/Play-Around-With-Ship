@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import ls from "local-storage";
+import Head from "next/head";
 
 const TetrisHighScores = () => {
-  const [highScores, setHighScores] = useState(ls.get("HIGHSCORES"));
+  const [highScores] = useState(ls.get("HIGHSCORES"));
 
   const displayHighScores = hs => {
     var toReturn = hs.map((score, index) => (
@@ -14,10 +15,27 @@ const TetrisHighScores = () => {
   };
 
   return (
-    <div id="high-scores">
-      <h2>HighScores</h2>
-      <ul>{highScores !== null && displayHighScores(highScores)}</ul>
-    </div>
+    <>
+      <Head>
+        <style jsx>
+          {`
+            #high-scores {
+              float: left;
+            }
+            #high-scores ul {
+              list-style: none;
+            }
+            .score {
+              font-size: 2em;
+            }
+          `}
+        </style>
+      </Head>
+      <div id="high-scores">
+        <h2>HighScores</h2>
+        <ul>{highScores !== null && displayHighScores(highScores)}</ul>
+      </div>
+    </>
   );
 };
 
