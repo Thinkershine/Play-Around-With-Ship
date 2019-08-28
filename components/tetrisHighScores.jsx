@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ls from "local-storage";
-import Head from "next/head";
 
 const TetrisHighScores = () => {
   const [highScores] = useState(ls.get("HIGHSCORES"));
@@ -16,21 +15,19 @@ const TetrisHighScores = () => {
 
   return (
     <>
-      <Head>
-        <style jsx>
-          {`
-            #high-scores {
-              float: left;
-            }
-            #high-scores ul {
-              list-style: none;
-            }
-            .score {
-              font-size: 2em;
-            }
-          `}
-        </style>
-      </Head>
+      <style jsx>
+        {`
+          #high-scores {
+            float: left;
+          }
+          #high-scores ul {
+            list-style: none;
+          }
+          .score {
+            font-size: 2em;
+          }
+        `}
+      </style>
       <div id="high-scores">
         <h2>HighScores</h2>
         <ul>{highScores !== null && displayHighScores(highScores)}</ul>
