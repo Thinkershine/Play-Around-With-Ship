@@ -20,6 +20,7 @@ function createPiece(type) {
 const tetri = [];
 
 const playerElements = document.querySelectorAll(".player");
+console.log("Player Elements", playerElements);
 [...playerElements].forEach(element => {
   const tetris = new Tetris(element);
   tetri.push(tetris);

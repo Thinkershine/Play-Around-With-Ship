@@ -1,3 +1,5 @@
+// import { isNullOrUndefined } from "util";
+
 class TetrisPlayer {
   constructor(tetris) {
     this.DROP_SLOW = 1000;
@@ -35,10 +37,7 @@ class TetrisPlayer {
     if (this.arena.collide(this)) {
       this.arena.clear();
       this.setHighScore();
-<<<<<<< HEAD
-=======
       this.setMinedCrypto();
->>>>>>> b9721d9de987dc857e20b35286a77e522f7406ec
       this.cryptoScore.score = 0;
       this.tetris.updateScore(this.cryptoScore);
     }
@@ -129,7 +128,7 @@ class TetrisPlayer {
 
   getMinedCrypto() {
     const storedMinedCrypto = JSON.parse(localStorage.getItem("MINED_CRYPTO"));
-    if (storedMinedCrypto === null){
+    if (storedMinedCrypto === null) {
       let newMinedCrypto = this.setMinedCrypto();
       return newMinedCrypto;
     } else {
@@ -138,19 +137,33 @@ class TetrisPlayer {
   }
 
   setMinedCrypto() {
-       let newMinedCrypto = {
-         btc: this.cryptoScore.btc,
-         eth: this.cryptoScore.eth,
-         trx: this.cryptoScore.trx,
-         usdt: this.cryptoScore.usdt,
-         vtc: this.cryptoScore.vtc,
-         ltc: this.cryptoScore.ltc,
-         xmr: this.cryptoScore.xmr
-       };
-       localStorage.setItem("MINED_CRYPTO", JSON.stringify(newMinedCrypto));
+    let newMinedCrypto;
+    if (this.cryptoScore !== null) {
+      newMinedCrypto = {
+        btc: this.cryptoScore.btc,
+        eth: this.cryptoScore.eth,
+        trx: this.cryptoScore.trx,
+        usdt: this.cryptoScore.usdt,
+        vtc: this.cryptoScore.vtc,
+        ltc: this.cryptoScore.ltc,
+        xmr: this.cryptoScore.xmr
+      };
+    } else {
+      newMinedCrypto = {
+        btc: 0,
+        eth: 0,
+        trx: 0,
+        usdt: 0,
+        vtc: 0,
+        ltc: 0,
+        xmr: 0
+      };
+    }
 
-       return newMinedCrypto;
- }
+    localStorage.setItem("MINED_CRYPTO", JSON.stringify(newMinedCrypto));
+
+    return newMinedCrypto;
+  }
 
   update(deltaTime) {
     this.dropCounter += deltaTime;

@@ -8,7 +8,7 @@ const Tetrises = () => {
   return (
     <>
       <Head>
-        <title>Tetris</title>
+        <title>Tetrises</title>
 
         <style jsx-global="true">
           {`
@@ -62,15 +62,6 @@ const Tetrises = () => {
             .coin-icon {
               margin-right: 5px;
               margin-left: 5px;
-            }
-            .score {
-              font-size: 2em;
-            }
-            #high-scores {
-              float: left;
-            }
-            #high-scores ul {
-              list-style: none;
             }
           `}
         </style>
