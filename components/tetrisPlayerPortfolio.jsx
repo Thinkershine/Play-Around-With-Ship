@@ -3,6 +3,36 @@ import React from "react";
 const TetrisPlayerPortfolio = () => {
   return (
     <div id="portfolio-score">
+      <style jsx>
+        {`
+          #portfolio-score {
+            width: 350px;
+            float: left;
+            margin: 25px;
+          }
+
+          #portfolio {
+            list-style: none;
+            margin: 0 auto;
+          }
+          #portfolio li {
+            font-size: 0.9em;
+          }
+          #portfolio li > p {
+            text-align: right;
+          }
+
+          .coin-icon {
+            margin-right: 5px;
+            margin-left: 5px;
+          }
+
+          .score {
+            font-size: 2em;
+            margin: 0;
+          }
+        `}
+      </style>
       <h2>Portfolio</h2>
       <ul id="portfolio">
         <li>
@@ -55,7 +85,10 @@ const TetrisPlayerPortfolio = () => {
           </p>
         </li>
       </ul>
-      <div className="score">SCORE : 0</div>
+      <div>
+        <h2>SCORE</h2>
+        <p className="score">0</p>
+      </div>
     </div>
   );
 };

@@ -95,8 +95,7 @@ class Tetris {
 
   updateScore(cryptoScore) {
     this.formatCryptoScore(cryptoScore.eth);
-    this.element.querySelector(".score").innerText =
-      "SCORE : " + cryptoScore.score;
+    this.element.querySelector(".score").innerText = cryptoScore.score;
     this.element.querySelector(".btc-score").innerText = this.formatCryptoScore(
       cryptoScore.btc
     );

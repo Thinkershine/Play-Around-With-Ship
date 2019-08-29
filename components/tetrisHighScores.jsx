@@ -18,10 +18,12 @@ const TetrisHighScores = () => {
       <style jsx>
         {`
           #high-scores {
-            float: left;
+            float: right;
+            margin: 25px;
           }
           #high-scores ul {
             list-style: none;
+            margin-top: 0 auto;
           }
           .score {
             font-size: 2em;
