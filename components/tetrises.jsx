@@ -9,15 +9,6 @@ const Tetrises = () => {
   return (
     <>
       <Head>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146774792-1"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments)}
-          gtag('js', new Date());
-
-          gtag('config', 'UA-146774792-1');
-        </script>
-
         <title>Tetrises</title>
 
         <style jsx-global="true">
@@ -63,6 +54,13 @@ const Tetrises = () => {
       </div>
 
       <p className="version">V {version}</p>
+      <div className="controls">
+        <h2>Controls</h2>
+        <p>A, D - Move Left & Right</p>
+        <p>Q, E - Rotate Left & Right </p>
+        <p>S - Drop</p>
+
+      </div>
 
       <script src="/static/models/tetrisArena.js" />
       <script src="/static/models/tetrisPlayer.js" />
