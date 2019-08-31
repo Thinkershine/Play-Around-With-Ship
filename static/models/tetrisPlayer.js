@@ -13,7 +13,16 @@ class TetrisPlayer {
 
     this.pos = { x: 5, y: 5 };
     this.matrix = null;
-    this.cryptoScore = this.getMinedCrypto();
+    this.cryptoScore = {
+      score: 0,
+      btc: 0,
+      eth: 0,
+      trx: 0,
+      usdt: 0,
+      vtc: 0,
+      ltc: 0,
+      xmr: 0
+    };
     this.cryptoScore.score = 0;
 
     this.reset();
@@ -137,9 +146,7 @@ class TetrisPlayer {
   }
 
   setMinedCrypto() {
-    let newMinedCrypto;
-    if (this.cryptoScore !== null) {
-      newMinedCrypto = {
+    let newMinedCrypto = {
         btc: this.cryptoScore.btc,
         eth: this.cryptoScore.eth,
         trx: this.cryptoScore.trx,
@@ -148,17 +155,6 @@ class TetrisPlayer {
         ltc: this.cryptoScore.ltc,
         xmr: this.cryptoScore.xmr
       };
-    } else {
-      newMinedCrypto = {
-        btc: 0,
-        eth: 0,
-        trx: 0,
-        usdt: 0,
-        vtc: 0,
-        ltc: 0,
-        xmr: 0
-      };
-    }
 
     localStorage.setItem("MINED_CRYPTO", JSON.stringify(newMinedCrypto));
 

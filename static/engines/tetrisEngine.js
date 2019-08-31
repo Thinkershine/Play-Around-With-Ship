@@ -20,14 +20,22 @@ function createPiece(type) {
 const tetri = [];
 
 const playerElements = document.querySelectorAll(".player");
-console.log("Player Elements", playerElements);
 [...playerElements].forEach(element => {
   const tetris = new Tetris(element);
   tetri.push(tetris);
 });
 
 const keyListener = event => {
-  [[65, 68, 81, 69, 83], [72, 75, 89, 73, 74]].forEach((key, index) => {
+  let keyBindings =[];
+  let onePlayer = true;
+  if (onePlayer) {
+    keyBindings = [[65, 68, 81, 69, 83]];
+  }
+  else {
+    keyBindings = [[65, 68, 81, 69, 83], [72, 75, 89, 73, 74]];
+  }
+
+  keyBindings.forEach((key, index) => {
     const player = tetri[index].player;
     if (event.type === "keydown") {
       if (event.keyCode === key[0]) {
